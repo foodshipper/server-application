@@ -6,7 +6,7 @@ from ean.api import api
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['ERROR_404_HELP'] = False
     db.init_app(app)
