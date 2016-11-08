@@ -6,7 +6,4 @@ services:
 before_script:
   - psql -c 'create database foodship;' -U foodship
 env:
-  - DB_USER=foodship
-  - DB_PASS=
-  - DB_HOST=localhost
-  - DB_NAME=foodship
+  - DB_USER=foodship DB_PASS= DB_HOST=localhost DB_NAME=foodship
