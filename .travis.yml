@@ -4,6 +4,6 @@ python:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database foodship;' -U foodship
+  - psql -c 'create database foodship;' -U postgres
 env:
   - DB_USER=foodship DB_PASS= DB_HOST=localhost DB_NAME=foodship
