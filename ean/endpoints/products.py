@@ -23,12 +23,12 @@ class ProductAPI(Resource):
         else:
             result = ProductData.request_product(ean)
             if result is not None:
-                self.addProduct(result['ean'], result['name'], result['type'])
+                self.add_product(result['ean'], result['name'], result['type'])
                 return result
 
             abort(404, message="Product with EAN {} does not exist.".format(ean))
 
-    '''def put(self, ean):
+    def put(self, ean):
         try:
             args = parser.parse_args()
         except Exception as e:
@@ -38,20 +38,19 @@ class ProductAPI(Resource):
         if len(args['name']) == 0 or len(args['type']) == 0:
             return abort(400, message="Invalid arguments")
 
-        p = Product.query.filter_by(ean=ean).first()
-        if p is None:
-            p = Product(ean, args['name'], args['type'])
-            db.session.add(p)
-            db.session.commit()
+        cursor = db.cursor()
+        cursor.execute("SELECT name, type FROM products WHERE ean=%s", (ean,))
+        if cursor.fetchone() is None:
+            self.add_product(ean, args['name'], args['type'])
+            cursor.close()
             return 201
         else:
-            p.name = args['name']
-            p.type = args['type']
-            db.session.add(p)
-            db.session.commit()
-            return 200'''
+            cursor.execute("UPDATE products SET name=%s, type=%s WHERE ean=%s", (args['name'], args['type'], ean))
+            db.commit()
+            cursor.close()
+            return 200
 
-    def addProduct(self, ean, name, type):
+    def add_product(self, ean, name, type):
         cur = db.cursor()
         cur.execute("INSERT INTO products (ean, name, type) VALUES (%s, %s, %s)", (ean, name, type))
         db.commit()
