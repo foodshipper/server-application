@@ -76,3 +76,8 @@ class ProductData():
             }
         else:
             return None
+
+
+class ProductTypes(Resource):
+    def get(self):
+        return ['milk', 'water', 'tomato', 'flour', 'pork', 'chicken', 'beef']
