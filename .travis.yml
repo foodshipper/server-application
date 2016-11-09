@@ -8,4 +8,4 @@ before_script:
   - psql -c 'create database foodship;' -U postgres
 script: python -m unittest discover -s . -p '*_test.py'
 env:
-  - DB_USER=foodship DB_PASS= DB_HOST=localhost DB_NAME=foodship
+  - DB_USER=postgres DB_PASS= DB_HOST=localhost DB_NAME=foodship
