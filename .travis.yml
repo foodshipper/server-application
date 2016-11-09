@@ -6,6 +6,6 @@ services:
 install: "pip install -r requirements.txt"
 before_script:
   - psql -c 'create database foodship;' -U postgres
-script: python -m unittest discover -s . -p '*_test.py
+script: python -m unittest discover -s . -p '*_test.py'
 env:
   - DB_USER=foodship DB_PASS= DB_HOST=localhost DB_NAME=foodship
