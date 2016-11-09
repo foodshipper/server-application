@@ -48,16 +48,8 @@ class FridgeItem(Resource):
                     (args['user_id'], ean))
                 query = cursor.fetchone()
                 if query is None:
+                    p = Product.get(ean) #Produces 404 if not exists
                     cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, args['user_id']])
-                    try:
-                        p = Product.get(ean)
-                    except HTTPException as e:
-                        if (e.code != 404):
-                            raise
-                        p = {
-                            'name': None,
-                            'type': None
-                        }
                     return p
                 else:
                     return {
