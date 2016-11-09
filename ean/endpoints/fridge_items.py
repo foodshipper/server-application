@@ -1,8 +1,8 @@
 from flask_restful import Resource, reqparse, abort
 from werkzeug.exceptions import HTTPException
 
-from database import db
-from endpoints.products import Product
+from ean.database import db
+from ean.endpoints.products import Product
 
 parser = reqparse.RequestParser()
 parser.add_argument('user_id', required=True)
