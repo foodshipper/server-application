@@ -17,3 +17,4 @@ deploy:
   file: release.zip
   on:
     repo: foodshipper/server-application
+    branch: master
