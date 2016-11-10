@@ -27,7 +27,7 @@ class FridgeOverview(Resource):
                     response.append({'ean': item[0],
                                      'name': item[1],
                                      'type': item[2]})
-                return response
+                return response, 200
 
 
 class FridgeItem(Resource):
@@ -48,12 +48,12 @@ class FridgeItem(Resource):
                 if query is None:
                     p = Product.get(ean)  # Produces 404 if not exists
                     cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, args['user_id']])
-                    return p
+                    return p, 201
                 else:
                     return {
                         "name": query[0],
                         "type": query[1]
-                    }
+                    }, 200
 
     def delete(self, ean):
         try:
@@ -64,6 +64,6 @@ class FridgeItem(Resource):
             with db.cursor() as cursor:
                 cursor.execute("DELETE FROM fridge_items WHERE ean=%s AND user_id=%s", [ean, args['user_id']])
                 if cursor.rowcount == 1:
-                    return 200
+                    return None, 200
                 else:
                     abort(404, message="Fridge item does not exist")

@@ -48,11 +48,11 @@ class Product(Resource):
                 cursor.execute("SELECT name, type FROM products WHERE ean=%s", (ean,))
                 if cursor.fetchone() is None:
                     self.add_product(ean, args['name'], args['type'])
-                    return 201
+                    return None, 201
                 else:
                     cursor.execute("UPDATE products SET name=%s, type=%s WHERE ean=%s", (args['name'], args['type'], ean))
                     db.commit()
-                    return 200
+                    return None, 200
 
     @staticmethod
     def add_product(ean, name, type):
