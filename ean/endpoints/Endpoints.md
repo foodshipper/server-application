@@ -5,7 +5,7 @@
 Returns JSON-Object with ean, name and type  
 Returns 404 if product is not found
 
-#### GET /product/4000406071242
+#### Example: GET /product/4000406071242
 ```javascript
 {
     "type": "flour",
@@ -24,6 +24,10 @@ Creates or updates (override) product information
 
 ## GET /types
 Returns a JSON-Array with valid product types
+#### Example: GET /types
+```javascript
+["milk", "water", "tomato", "flour", "pork", "chicken", "beef", "undefined"]
+```
 
 # Fridge Items
 _user_id_: Unique Identification of the current user
@@ -32,6 +36,15 @@ Every request expects a valid user_id!
 
 ## GET /items
 Returns a JSON Array with Products that are saved for the current user
+
+#### Example: GET /items?user_id=5
+```javascript
+[{
+    "type": "flour",
+    "ean": "4000406071242",
+    "name": "Aurora Weizenvollkorn Mehl, 5er Pack (5 x 1 kg)"
+}]
+```
 
 ## PUT /items/<<string:ean>>
 Saves a specific product for the given user, returns JSON Product Object  
