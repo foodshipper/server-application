@@ -1,5 +1,5 @@
 import requests
-from flask_restful import Resource, marshal_with, abort, reqparse
+from flask_restful import Resource, abort, reqparse
 
 from ean.database import db
 
