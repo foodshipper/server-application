@@ -9,7 +9,7 @@ before_script:
 script: python -m unittest discover -s . -p '*_test.py'
 env:
 - DB_USER=postgres DB_PASS= DB_HOST=localhost DB_NAME=foodship
-before_deploy: zip release.zip ean/
+before_deploy: zip -r release.zip ean/
 deploy:
   provider: releases
   api_key:
