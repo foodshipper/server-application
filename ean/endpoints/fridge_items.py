@@ -13,7 +13,6 @@ class FridgeOverview(Resource):
         try:
             args = parser.parse_args()
         except Exception as e:
-            print(e)
             return abort(400, message="Invalid arguments")
 
         with db:
@@ -36,7 +35,6 @@ class FridgeItem(Resource):
         try:
             args = parser.parse_args()
         except Exception as e:
-            print(e)
             return abort(400, message="Invalid arguments")
 
         with db:
@@ -48,7 +46,7 @@ class FridgeItem(Resource):
                     (args['user_id'], ean))
                 query = cursor.fetchone()
                 if query is None:
-                    p = Product.get(ean) #Produces 404 if not exists
+                    p = Product.get(ean)  # Produces 404 if not exists
                     cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, args['user_id']])
                     return p
                 else:
@@ -61,7 +59,6 @@ class FridgeItem(Resource):
         try:
             args = parser.parse_args()
         except Exception as e:
-            print(e)
             return abort(400, message="Invalid arguments")
         with db:
             with db.cursor() as cursor:
