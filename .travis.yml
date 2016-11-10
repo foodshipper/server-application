@@ -1,11 +1,19 @@
 language: python
 python:
-    - 3.5
+- 3.5
 services:
-  - postgresql
-install: "pip install -r requirements.txt"
+- postgresql
+install: pip install -r requirements.txt
 before_script:
-  - psql -c 'create database foodship;' -U postgres
+- psql -c 'create database foodship;' -U postgres
 script: python -m unittest discover -s . -p '*_test.py'
 env:
-  - DB_USER=postgres DB_PASS= DB_HOST=localhost DB_NAME=foodship
+- DB_USER=postgres DB_PASS= DB_HOST=localhost DB_NAME=foodship
+before_deploy: zip release.zip ean/
+deploy:
+  provider: releases
+  api_key:
+    secure: C1NCiRSBIGTfAYNsckM5QBDutOIV9J4PSLKDvvfB2STX0P1/W7kjpnj4cTAg5kpwPAWi4DCVt0qOpuMRCPflhvJma+/z3entBTJaQuYV2AhOV0b/ypuyfNW4B6StWiciUj97kUeTnwqh0Lm0bB85fElLHD02x3hNP8sicSfYVYUsuqBss1VQGrjtPsoislg3ChVUKi0hg6h02Kgjj2J1HDpXVv88T0kDwYSKaEyH0yyMAgT2UlupEu/bAODdA6UGwX7TYnElERCI2CUO/1zd3MmpyvOtRbpItrWIgvoawFtYew21evzOx9aJe3kz5nAT/+G3REwh9gAb4ZejLfLYMxyJdzfyuBvIHtNl3jILeB2yDr2ONBUD7Q6BT13KS2lh6ke9XrBapAR781P9R9iCFLIspMfGujkVsEW77zazusZ8pm3l2QYlM7I8Epe6gQgm3nD37Ox427YBMuSObbGjXCenjgLmbpEZHGnZ48j38MbLdVDe+IRqRMiMsTWy6toA+tNsyRO6sBMHQ8pPkPrmDDYh55Aah9MYS7z2+m3g0AxDLU3vn9p2BUS4PaDgUmmfNjP88uS8ljh2FZxviVrdVUkTHFXaESgqzc+wJvmN95ExVcczDZ4zyY01Yj44tC3TLEtO764oNAn6oDUZzIFHfv2OM28DZMW4vKAzjdkDOiM=
+  file: release.zip
+  on:
+    repo: foodshipper/server-application
