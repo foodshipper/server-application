@@ -16,7 +16,8 @@ pip3 install -r requirements.txt # Install python modules
 cp foodship-api.ini ../
 ```
 
-* You have to adapt the database credentials in ```foodship-api.ini```
+*   You have to adapt the database credentials in ```foodship-api.ini```.
+    There is also an configuration example for using Github Hooks with [python-github-webhooks](https://github.com/carlos-jenkins/python-github-webhooks)
 * You have to add a config file for your webserver, eg nginx:
 
 ```
