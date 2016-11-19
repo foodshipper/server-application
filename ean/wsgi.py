@@ -1,4 +1,4 @@
-from ean.app import create_app
+from app import create_app
 from werkzeug.contrib.fixers import ProxyFix # needed for http server proxies
 from werkzeug.debug import DebuggedApplication
 
