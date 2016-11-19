@@ -15,7 +15,7 @@ Returns 404 if product is not found
 ```
 
 ## PUT /product/<<string:ean>>
-_name_: Name of the product  
+_name_: Name of the product
 _type_: Type of the product, must be from `/types`
 
 Creates or updates (override) product information
@@ -47,9 +47,21 @@ Returns a JSON Array with Products that are saved for the current user
 ```
 
 ## PUT /items/<<string:ean>>
-Saves a specific product for the given user, returns JSON Product Object  
+Saves a specific product for the given user, returns JSON Product Object
 Returns a 404 if product does not exist
 
 ## DELETE /items/<<string:ean>>
-Deletes the product from the users storage  
+Deletes the product from the users storage
 Returns a 404, if the user did not have the product
+
+# User Location
+_user_id_: Unique Identification of the current user
+
+## PUT /home-location
+_lon_: Longitude
+_lat_: Latitude
+
+Create or updates the user location
+
+## GET /home-location
+Not implemented for privacy reasons!
