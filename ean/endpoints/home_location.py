@@ -17,13 +17,13 @@ class HomeLocation(Resource):
 
         with db:
             with db.cursor() as cursor:
-                cursor.execute("SELECT location FROM user WHERE user_id=%s", [args['user_id']])
+                cursor.execute("SELECT location FROM users WHERE user_id=%s", [args['user_id']])
                 query = cursor.fetchone()
                 if query is None:
-                    cursor.execute("INSERT INTO user (user_id, location) VALUES (%s, ST_MakePoint(%s, %s))",
+                    cursor.execute("INSERT INTO users (user_id, location) VALUES (%s, ST_MakePoint(%s, %s))",
                                    [args['user_id'], args['lon'], args['lat']])
                     return None,201
                 else:
-                    cursor.execute("UPDATE user SET location=ST_MakePoint(%s, %s) WHERE user_id=%s",
+                    cursor.execute("UPDATE users SET location=ST_MakePoint(%s, %s) WHERE user_id=%s",
                                    [args['lon'], args['lat'], args['user_id']])
                     return None,200
