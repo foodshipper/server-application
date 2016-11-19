@@ -1,7 +1,7 @@
 from flask import Flask
 
-from api import api
-from database import create_tables
+from ean.api import api
+from ean.database import create_tables
 
 
 def create_app():

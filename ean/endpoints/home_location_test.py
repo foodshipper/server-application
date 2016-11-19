@@ -1,4 +1,4 @@
-from FoodshipTest import FoodshipTest
+from ean.FoodshipTest import FoodshipTest
 
 
 class HomeLocationTest(FoodshipTest):

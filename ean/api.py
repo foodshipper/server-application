@@ -1,8 +1,8 @@
 from flask_restful import Api
 
-from endpoints.products import Product, ProductTypes
-from endpoints.version import APIInfo
-from endpoints.fridge_items import FridgeOverview, FridgeItem
+from ean.endpoints.products import Product, ProductTypes
+from ean.endpoints.version import APIInfo
+from ean.endpoints.fridge_items import FridgeOverview, FridgeItem
 
 api = Api()
 

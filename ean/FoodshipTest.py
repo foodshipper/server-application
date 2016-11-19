@@ -1,4 +1,4 @@
-from app import create_app
+from ean.app import create_app
 import unittest
 
 
