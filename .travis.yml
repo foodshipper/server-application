@@ -5,7 +5,8 @@ services:
 - postgresql
 install: pip install -r requirements.txt
 before_script:
-- psql -c 'create database foodship; create extension postgis;' -U postgres
+- psql -c 'create database foodship;' -U postgres
+- psql -c 'create extension postgis;' -U postgres
 
 script: python -m unittest discover -s . -p '*_test.py'
 env:
