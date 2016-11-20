@@ -4,7 +4,7 @@ from flask_restful import Resource, abort, reqparse
 from ean.database import db
 
 parser = reqparse.RequestParser()
-parser.add_argument('name', required=True)
+parser.add_argument('name')
 parser.add_argument('type', required=True)
 
 
@@ -36,8 +36,11 @@ class Product(Resource):
         except Exception as e:
             return abort(400, message="Invalid arguments")
 
-        if len(args['name']) == 0 or len(args['type']) == 0:
+        if len(args['type']) == 0:
             return abort(400, message="Invalid arguments")
+
+        if len(args['name']) == 0:
+            args['name'] = "Unknown"
 
         with db:
             with db.cursor() as cursor:
