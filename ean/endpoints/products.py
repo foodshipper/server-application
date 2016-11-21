@@ -36,10 +36,10 @@ class Product(Resource):
         except Exception as e:
             return abort(400, message="Invalid arguments")
 
-        if len(args['type']) == 0:
+        if args['type'] is None or len(args['type']) == 0:
             return abort(400, message="Invalid arguments")
 
-        if len(args['name']) == 0:
+        if args['name'] is None or len(args['name']) == 0:
             args['name'] = "Unknown"
 
         with db:
