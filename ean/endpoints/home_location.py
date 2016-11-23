@@ -1,6 +1,6 @@
 from flask_restful import Resource, abort, reqparse
 
-from database import db
+from ean.database import db
 
 parser = reqparse.RequestParser()
 parser.add_argument('user_id', required=True)

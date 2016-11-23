@@ -1,6 +1,6 @@
 from flask import json
 
-from FoodshipTest import FoodshipTest
+from ean.FoodshipTest import FoodshipTest
 
 
 class TestUserName(FoodshipTest):

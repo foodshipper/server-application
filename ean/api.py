@@ -1,11 +1,11 @@
 from flask_restful import Api
 
-from endpoints.fridge_items import FridgeItem
-from endpoints.fridge_items import FridgeOverview
-from endpoints.home_location import HomeLocation
-from endpoints.products import Product, ProductTypes
-from endpoints.user_name import UserName
-from endpoints.version import APIInfo
+from ean.endpoints.fridge_items import FridgeItem
+from ean.endpoints.fridge_items import FridgeOverview
+from ean.endpoints.home_location import HomeLocation
+from ean.endpoints.products import Product, ProductTypes
+from ean.endpoints.user_name import UserName
+from ean.endpoints.version import APIInfo
 
 api = Api()
 
