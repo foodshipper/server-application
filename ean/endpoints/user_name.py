@@ -19,18 +19,16 @@ class UserName(Resource):
         if args['name'] is None:
             return abort(400, message="Invalid Arguments")
 
-        args['name'] = str(args['name'])
-
         with db:
             with db.cursor() as cursor:
                 id = id_from_token(args['token'])
 
                 if id is None:
-                    cursor.execute("INSERT INTO users (token, name) VALUES (%s, %s)",
+                    cursor.execute(u"INSERT INTO users (token, name) VALUES (%s, %s)",
                                    [args['token'], args['name']])
                     return None, 201
                 else:
-                    cursor.execute("UPDATE users SET name=%s WHERE id=%s",
+                    cursor.execute(u"UPDATE users SET name=%s WHERE id=%s",
                                    [args['name'], id])
                     return None, 200
 
