@@ -2,11 +2,11 @@ from ean.FoodshipTest import FoodshipTest
 
 
 class HomeLocationTest(FoodshipTest):
-    user_id = "TEST"
+    token = "TEST"
 
     def test_put(self):
-        rv = self.app.put("/v1/home-location", data=dict(
-            user_id=self.user_id,
+        rv = self.app.put("/v1/user/home-location", data=dict(
+            token=self.token,
             lon=0,
             lat=0
         ))

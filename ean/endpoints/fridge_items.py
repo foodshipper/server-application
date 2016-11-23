@@ -2,9 +2,10 @@ from flask_restful import Resource, reqparse, abort
 
 from ean.database import db
 from ean.endpoints.products import Product
+from user import get_or_create_id
 
 parser = reqparse.RequestParser()
-parser.add_argument('user_id', required=True)
+parser.add_argument('token', required=True)
 
 
 class FridgeOverview(Resource):
@@ -16,11 +17,13 @@ class FridgeOverview(Resource):
 
         with db:
             with db.cursor() as cursor:
+                id = get_or_create_id(args['token'])
+
                 cursor.execute(
                     "SELECT fridge_items.ean, products.name, products.type FROM fridge_items"
                     " JOIN products ON products.ean=fridge_items.ean"
                     " WHERE fridge_items.user_id=%s",
-                    (args['user_id'],))
+                    [id])
                 response = []
                 for item in cursor.fetchall():
                     response.append({'ean': item[0],
@@ -38,15 +41,17 @@ class FridgeItem(Resource):
 
         with db:
             with db.cursor() as cursor:
+                id = get_or_create_id(args['token'])
+
                 cursor.execute(
                     "SELECT products.name, products.type FROM fridge_items"
                     " JOIN products ON products.ean=fridge_items.ean"
                     " WHERE fridge_items.user_id=%s AND fridge_items.ean=%s",
-                    (args['user_id'], ean))
+                    [id, ean])
                 query = cursor.fetchone()
                 if query is None:
                     p = Product.get(ean)  # Produces 404 if not exists
-                    cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, args['user_id']])
+                    cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, id])
                     return p, 201
                 else:
                     return {
@@ -61,7 +66,9 @@ class FridgeItem(Resource):
             return abort(400, message="Invalid arguments")
         with db:
             with db.cursor() as cursor:
-                cursor.execute("DELETE FROM fridge_items WHERE ean=%s AND user_id=%s", [ean, args['user_id']])
+                id = get_or_create_id(args['token'])
+
+                cursor.execute("DELETE FROM fridge_items WHERE ean=%s AND fridge_items.user_id=%s", [ean, id])
                 if cursor.rowcount == 1:
                     return None, 200
                 else:

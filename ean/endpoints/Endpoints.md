@@ -30,14 +30,14 @@ Returns a JSON-Array with valid product types
 ```
 
 # Fridge Items
-_user_id_: Unique Identification of the current user
+_token_: Unique Identification of the current user
 
-Every request expects a valid user_id!
+Every request expects a valid token!
 
 ## GET /items
 Returns a JSON Array with Products that are saved for the current user
 
-#### Example: GET /items?user_id=5
+#### Example: GET /items?token=5
 ```javascript
 [{
     "type": "flour",
@@ -55,7 +55,7 @@ Deletes the product from the users storage
 Returns a 404, if the user did not have the product
 
 # User
-_user_id_: Unique Identification of the current user
+_token_: Unique Identification of the current user
 
 ## PUT /user/home-location
 _lon_: Longitude
@@ -73,3 +73,5 @@ Creates or updates the user name
 
 ## GET /user/name
 Gets the name of the user
+
+
