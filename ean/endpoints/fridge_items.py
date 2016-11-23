@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse, abort
 
 from ean.database import db
 from ean.endpoints.products import Product
-from ean.user import get_or_create_id
+from ean.user import get_or_create_id, id_from_token
 
 parser = reqparse.RequestParser()
 parser.add_argument('token', required=True)
@@ -66,7 +66,7 @@ class FridgeItem(Resource):
             return abort(400, message="Invalid arguments")
         with db:
             with db.cursor() as cursor:
-                id = get_or_create_id(args['token'])
+                id = id_from_token(args['token'])
 
                 cursor.execute("DELETE FROM fridge_items WHERE ean=%s AND fridge_items.user_id=%s", [ean, id])
                 if cursor.rowcount == 1:

@@ -19,9 +19,8 @@ def register_user(token):
             if user is not None:
                 raise Exception("Token already registered")
             else:
-                cursor.execute("INSERT INTO users (token) VALUES (%s)", [token])
-            db.commit()
-            return cursor.lastrowid
+                cursor.execute("INSERT INTO users (token) VALUES (%s) RETURNING id", [token])
+                return cursor.fetchone()[0]
 
 
 def token_exists(token):
