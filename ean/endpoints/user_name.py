@@ -27,7 +27,7 @@ class UserName(Resource):
                                    [args['user_id'], args['name']])
                     return None, 201
                 else:
-                    cursor.execute("UPDATE users SET user=%s WHERE user_id=%s",
+                    cursor.execute("UPDATE users SET name=%s WHERE user_id=%s",
                                    [args['name'], args['user_id']])
                     return None, 200
 
