@@ -1,4 +1,4 @@
-from database import db
+from ean.database import db
 
 
 def id_from_token(token):
