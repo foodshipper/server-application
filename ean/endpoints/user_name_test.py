@@ -5,7 +5,7 @@ from ean.FoodshipTest import FoodshipTest
 
 class TestUserName(FoodshipTest):
     token = "TEST"
-    name = "testname"
+    name = "ö"
 
     def test_put(self):
         rv = self.app.put("/v1/user/name", data=dict(
