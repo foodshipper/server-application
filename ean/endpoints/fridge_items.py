@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse, abort
 
 from ean.database import db
 from ean.endpoints.products import Product
-from user import get_or_create_id
+from ean.user import get_or_create_id
 
 parser = reqparse.RequestParser()
 parser.add_argument('token', required=True)
