@@ -20,6 +20,7 @@ def register_user(token):
                 raise Exception("Token already registered")
             else:
                 cursor.execute("INSERT INTO users (token) VALUES (%s)", [token])
+            db.commit()
             return cursor.lastrowid
 
 
