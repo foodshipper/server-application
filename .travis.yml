@@ -7,7 +7,15 @@ install: pip install -r requirements.txt
 before_script:
   - psql -c 'CREATE DATABASE foodship;' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d foodship
-
+after_success:
+  if [ -n "$GITHUB_API_KEY" ]; then
+    git checkout -b deploy
+    git add .
+    git -c user.name='travis' -c user.email='travis' commit -m "Deploy"
+    # Make sure to make the output quiet, or else the API token will leak!
+    # This works because the API key can replace your password.
+    git push -f -q &2>/dev/null
+  fi
 script: python -m unittest discover -s . -p '*_test.py'
 env:
 - DB_USER=postgres DB_PASS= DB_HOST=localhost DB_NAME=foodship
