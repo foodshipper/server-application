@@ -1,4 +1,3 @@
-from circus.py3compat import unicode
 from flask_restful import Resource, abort, reqparse
 from werkzeug.exceptions import BadRequest
 
@@ -20,17 +19,20 @@ class UserName(Resource):
         if args['name'] is None:
             return abort(400, message="Invalid Arguments")
 
+        name = args['name']
+        print(name)
+
         with db:
             with db.cursor() as cursor:
                 id = id_from_token(args['token'])
 
                 if id is None:
                     cursor.execute(u"INSERT INTO users (token, name) VALUES (%s, %s)",
-                                   [args['token'], unicode(args['name'])])
+                                   [args['token'], name])
                     return None, 201
                 else:
                     cursor.execute(u"UPDATE users SET name=%s WHERE id=%s",
-                                   [unicode(args['name']), id])
+                                   [name, id])
                     return None, 200
 
     def get(self):
