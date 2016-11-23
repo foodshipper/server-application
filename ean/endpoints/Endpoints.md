@@ -2,7 +2,7 @@
 
 # Products
 ## GET /product/<<string:ean>>
-Returns JSON-Object with ean, name and type  
+Returns JSON-Object with ean, name and type
 Returns 404 if product is not found
 
 #### Example: GET /product/4000406071242
@@ -54,14 +54,22 @@ Returns a 404 if product does not exist
 Deletes the product from the users storage
 Returns a 404, if the user did not have the product
 
-# User Location
+# User
 _user_id_: Unique Identification of the current user
 
-## PUT /home-location
+## PUT /user/home-location
 _lon_: Longitude
 _lat_: Latitude
 
 Create or updates the user location
 
-## GET /home-location
+## GET /user/home-location
 Not implemented for privacy reasons!
+
+## PUT /user/name
+_name_: Name of the user
+
+Creates or updates the user name
+
+## GET /user/name
+Gets the name of the user

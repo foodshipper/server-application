@@ -1,5 +1,6 @@
-from ean.app import create_app
 import unittest
+
+from app import create_app
 
 
 class FoodshipTest(unittest.TestCase):
