@@ -42,10 +42,13 @@ def create_tables():
                 "   RETURN NEW;"
                 " END;"
                 "$set_user_geom$ LANGUAGE plpgsql;")
-            cursor.execute(
-                "CREATE TRIGGER user_geom "
-                "BEFORE INSERT OR UPDATE ON users"
-                " FOR EACH ROW EXECUTE PROCEDURE set_user_geom();")
+            cursor.execute("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal AND tgrelid = 'users'::regclass")
+            trigger = cursor.fetchone()
+            if trigger is None or trigger[0] != "user_geom":
+                cursor.execute(
+                    "CREATE TRIGGER user_geom "
+                    "BEFORE INSERT OR UPDATE ON users"
+                    " FOR EACH ROW EXECUTE PROCEDURE set_user_geom();")
 
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS fridge_items "
