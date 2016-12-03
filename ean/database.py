@@ -24,6 +24,8 @@ def create_tables():
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS products "
                 "(ean VARCHAR(13) PRIMARY KEY, name VARCHAR(100), type VARCHAR(30) REFERENCES product_types(name))")
+
+            #User Table
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS users "
                 "(id SERIAL PRIMARY KEY,"
@@ -32,9 +34,6 @@ def create_tables():
                 " latitude DOUBLE PRECISION,"
                 " geom GEOGRAPHY (POINT,4326),"
                 " name VARCHAR(30))")
-            cursor.execute(
-                "CREATE TABLE IF NOT EXISTS fridge_items "
-                "(id SERIAL PRIMARY KEY, ean VARCHAR(13) REFERENCES products(ean), user_id SERIAL REFERENCES users(id))")
             cursor.execute(
                 "CREATE OR REPLACE FUNCTION set_user_geom()"
                 " RETURNS TRIGGER AS $set_user_geom$"
@@ -47,3 +46,19 @@ def create_tables():
                 "CREATE TRIGGER user_geom "
                 "BEFORE INSERT OR UPDATE ON users"
                 " FOR EACH ROW EXECUTE PROCEDURE set_user_geom();")
+
+            cursor.execute(
+                "CREATE TABLE IF NOT EXISTS fridge_items "
+                "(id SERIAL PRIMARY KEY, ean VARCHAR(13) REFERENCES products(ean), user_id SERIAL REFERENCES users(id))")
+
+            #Group Table
+            cursor.execute(
+                           "CREATE TABLE IF NOT EXISTS groups "
+                           "(id SERIAL PRIMARY KEY)")
+            cursor.execute(
+                           "CREATE TABLE IF NOT EXISTS groups_rel "
+                           "(id SERIAL PRIMARY KEY,"
+                           "user_id SERIAL REFERENCES users(id),"
+                           "group_id SERIAL REFERENCES groups(id),"
+                           "invited BOOL,"
+                           "accepted BOOL)")
