@@ -30,7 +30,20 @@ def create_tables():
                 " token VARCHAR(64),"
                 " longitude DOUBLE PRECISION,"
                 " latitude DOUBLE PRECISION,"
+                " geom GEOGRAPHY (POINT,4326),"
                 " name VARCHAR(30))")
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS fridge_items "
                 "(id SERIAL PRIMARY KEY, ean VARCHAR(13) REFERENCES products(ean), user_id SERIAL REFERENCES users(id))")
+            cursor.execute(
+                "CREATE OR REPLACE FUNCTION set_user_geom()"
+                " RETURNS TRIGGER AS $set_user_geom$"
+                " BEGIN"
+                "   NEW.geom := st_makepoint(NEW.latitude, NEW.longitude);"
+                "   RETURN NEW;"
+                " END;"
+                "$set_user_geom$ LANGUAGE plpgsql;")
+            cursor.execute(
+                "CREATE TRIGGER user_geom "
+                "BEFORE INSERT OR UPDATE ON users"
+                " FOR EACH ROW EXECUTE PROCEDURE set_user_geom();")
