@@ -12,18 +12,18 @@ class FridgeOverview(Resource):
     def get(self):
         try:
             args = parser.parse_args()
-        except Exception as e:
+        except Exception:
             return abort(400, message="Invalid arguments")
 
         with db:
             with db.cursor() as cursor:
-                id = get_or_create_id(args['token'])
+                user_id = get_or_create_id(args['token'])
 
                 cursor.execute(
                     "SELECT fridge_items.ean, products.name, products.type FROM fridge_items"
                     " JOIN products ON products.ean=fridge_items.ean"
                     " WHERE fridge_items.user_id=%s",
-                    [id])
+                    [user_id])
                 response = []
                 for item in cursor.fetchall():
                     response.append({'ean': item[0],
@@ -36,22 +36,22 @@ class FridgeItem(Resource):
     def put(self, ean):
         try:
             args = parser.parse_args()
-        except Exception as e:
+        except Exception:
             return abort(400, message="Invalid arguments")
 
         with db:
             with db.cursor() as cursor:
-                id = get_or_create_id(args['token'])
+                user_id = get_or_create_id(args['token'])
 
                 cursor.execute(
                     "SELECT products.name, products.type FROM fridge_items"
                     " JOIN products ON products.ean=fridge_items.ean"
                     " WHERE fridge_items.user_id=%s AND fridge_items.ean=%s",
-                    [id, ean])
+                    [user_id, ean])
                 query = cursor.fetchone()
                 if query is None:
                     p = Product.get(ean)  # Produces 404 if not exists
-                    cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, id])
+                    cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, user_id])
                     return p, 201
                 else:
                     return {
@@ -62,13 +62,13 @@ class FridgeItem(Resource):
     def delete(self, ean):
         try:
             args = parser.parse_args()
-        except Exception as e:
+        except Exception:
             return abort(400, message="Invalid arguments")
         with db:
             with db.cursor() as cursor:
-                id = id_from_token(args['token'])
+                user_id = id_from_token(args['token'])
 
-                cursor.execute("DELETE FROM fridge_items WHERE ean=%s AND fridge_items.user_id=%s", [ean, id])
+                cursor.execute("DELETE FROM fridge_items WHERE ean=%s AND fridge_items.user_id=%s", [ean, user_id])
                 if cursor.rowcount == 1:
                     return None, 200
                 else:

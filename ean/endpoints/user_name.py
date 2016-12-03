@@ -23,15 +23,15 @@ class UserName(Resource):
 
         with db:
             with db.cursor() as cursor:
-                id = id_from_token(args['token'])
+                user_id = id_from_token(args['token'])
 
-                if id is None:
+                if user_id is None:
                     cursor.execute(u"INSERT INTO users (token, name) VALUES (%s, %s)",
                                    [args['token'], name])
                     return None, 201
                 else:
                     cursor.execute(u"UPDATE users SET name=%s WHERE id=%s",
-                                   [name, id])
+                                   [name, user_id])
                     return None, 200
 
     def get(self):

@@ -13,17 +13,17 @@ class HomeLocation(Resource):
     def put(self):
         try:
             args = parser.parse_args()
-        except Exception as e:
+        except Exception:
             return abort(400, message="Invalid arguments")
 
         with db:
             with db.cursor() as cursor:
-                id = id_from_token(args['token'])
-                if id is None:
+                user_id = id_from_token(args['token'])
+                if user_id is None:
                     cursor.execute("INSERT INTO users (token, longitude, latitude) VALUES (%s, %s, %s)",
                                    [args['token'], args['lon'], args['lat']])
                     return None,201
                 else:
-                    cursor.execute("UPDATE users SET longitude=%s, latitude= %s WHERE id=%s",
-                                   [args['lon'], args['lat'], id])
+                    cursor.execute("UPDATE users SET longitude=%s, latitude=%s WHERE id=%s",
+                                   [args['lon'], args['lat'], user_id])
                     return None,200

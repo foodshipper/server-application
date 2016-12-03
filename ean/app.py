@@ -15,7 +15,7 @@ def check_cronjob():
         job = my_cron.new(cmd, 'Foodship API Worker')
         job.minute.every(15)
         my_cron.write()
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         print("Could not create Crontab Entry: File not found", file=sys.stderr)
 
 

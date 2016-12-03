@@ -33,7 +33,7 @@ class Product(Resource):
     def put(self, ean):
         try:
             args = parser.parse_args()
-        except Exception as e:
+        except Exception:
             return abort(400, message="Invalid arguments")
 
         if args['type'] is None or len(args['type']) == 0:
@@ -53,17 +53,19 @@ class Product(Resource):
                     self.add_product(ean, args['name'], args['type'])
                     return None, 201
                 else:
-                    cursor.execute("UPDATE products SET name=%s, type=%s WHERE ean=%s", (args['name'], args['type'], ean))
+                    cursor.execute("UPDATE products SET name=%s, type=%s WHERE ean=%s",
+                                   (args['name'], args['type'], ean))
                     db.commit()
                     return None, 200
 
     @staticmethod
-    def add_product(ean, name, type):
+    def add_product(ean, name, product_type):
         with db:
             with db.cursor() as cursor:
-                    cursor.execute("INSERT INTO products (ean, name, type) VALUES (%s, %s, %s)", (ean, name, type))
+                cursor.execute("INSERT INTO products (ean, name, type) VALUES (%s, %s, %s)", (ean, name, product_type))
 
-class ProductData():
+
+class ProductData:
     @staticmethod
     def request_product(gtin):
         req = requests.get(

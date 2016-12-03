@@ -25,7 +25,7 @@ def create_groups():
                 if current_middleman is not item[0]:
                     current_middleman = item[0]
                     cursor.execute(
-                        "SELECT * FROM groups_rel LEFT JOIN groups ON groups.id=groups_rel.group_id WHERE day=CURRENT_DATE AND user_id= %s",
+                        "SELECT * FROM groups_rel LEFT JOIN groups ON groups.id=groups_rel.group_id WHERE day=CURRENT_DATE AND user_id=%s",
                         [current_middleman])
 
                     if cursor.rowcount > 0:
