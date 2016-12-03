@@ -14,3 +14,4 @@ psycopg2>=2.6.2
 circus>=0.14.0
 wheel>=0.30.0a0 
 chaussette>=1.3.0
+crontab>=2.1.1
