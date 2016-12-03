@@ -20,7 +20,6 @@ class UserName(Resource):
             return abort(400, message="Invalid Arguments")
 
         name = args['name']
-        print(name)
 
         with db:
             with db.cursor() as cursor:
