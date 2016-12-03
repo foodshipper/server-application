@@ -57,11 +57,30 @@ def create_tables():
             #Group Table
             cursor.execute(
                            "CREATE TABLE IF NOT EXISTS groups "
-                           "(id SERIAL PRIMARY KEY)")
+                           "(id SERIAL PRIMARY KEY,"
+                           " day DATE)")
             cursor.execute(
                            "CREATE TABLE IF NOT EXISTS groups_rel "
                            "(id SERIAL PRIMARY KEY,"
                            "user_id SERIAL REFERENCES users(id),"
                            "group_id SERIAL REFERENCES groups(id),"
-                           "invited BOOL,"
-                           "accepted BOOL)")
+                           "invited BOOL DEFAULT FALSE,"
+                           "accepted BOOL DEFAULT FALSE)")
+
+            cursor.execute(
+                "CREATE OR REPLACE FUNCTION unique_group_member()"
+                " RETURNS TRIGGER AS $unique_group_member$"
+                " BEGIN"
+                "   IF EXISTS(SELECT TRUE FROM groups_rel LEFT JOIN groups ON groups_rel.group_id=groups.id WHERE day=CURRENT_DATE AND user_id=NEW.user_id) THEN"
+                "    RAISE EXCEPTION 'Group Member can not be in two groups on the same day';"
+                "   END IF;"
+                "   RETURN NEW;"
+                " END;"
+                " $unique_group_member$ LANGUAGE plpgsql;")
+            cursor.execute("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal AND tgrelid = 'groups_rel'::regclass")
+            trigger = cursor.fetchone()
+            if trigger is None or trigger[0] != "groups_rel_unique":
+                cursor.execute(
+                    "CREATE TRIGGER groups_rel_unique "
+                    "BEFORE INSERT OR UPDATE ON groups_rel"
+                    " FOR EACH ROW EXECUTE PROCEDURE unique_group_member();")
