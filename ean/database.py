@@ -26,7 +26,11 @@ def create_tables():
                 "(ean VARCHAR(13) PRIMARY KEY, name VARCHAR(100), type VARCHAR(30) REFERENCES product_types(name))")
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS users "
-                "(id SERIAL PRIMARY KEY, token VARCHAR(64), location GEOGRAPHY (POINT,4326), name VARCHAR(30))")
+                "(id SERIAL PRIMARY KEY,"
+                " token VARCHAR(64),"
+                " longitude DOUBLE PRECISION,"
+                " latitude DOUBLE PRECISION,"
+                " name VARCHAR(30))")
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS fridge_items "
                 "(id SERIAL PRIMARY KEY, ean VARCHAR(13) REFERENCES products(ean), user_id SERIAL REFERENCES users(id))")
