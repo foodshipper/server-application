@@ -1,15 +1,26 @@
-from flask import Flask
+import logging
+import os
+import sys
+
 from crontab import CronTab
-import sys, os
+from flask import Flask
+
 from ean.api import api
 from ean.database import check_db
-import logging
+
 
 def check_cronjob():
     logging.debug("Checking for Cronjob")
+
     try:
         my_cron = CronTab(user=True)
-        cmd = sys.executable + " " + os.getcwd() + "/ean/cron/cron.py"
+
+        cmd = "DB_HOST='" + os.environ.get("DB_HOST", "localhost") + "' "
+        cmd += "DB_USER='" + os.environ.get("DB_USER", "foodship") + "' "
+        cmd += "DB_PASS='" + os.environ.get("DB_PASS", "") + "' "
+        cmd += "DB_NAME='" + os.environ.get("DB_NAME", "foodship") + "' "
+        cmd += sys.executable + " " + os.getcwd() + "/ean/cron/cron.py"
+
         i = 0
         for job in my_cron.find_command(cmd):
             i += 1
@@ -34,6 +45,7 @@ def create_app():
     check_cronjob()
 
     return app
+
 
 if __name__ == '__main__':
     app = create_app()
