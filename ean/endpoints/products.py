@@ -33,10 +33,8 @@ class Product(Resource):
     def put(self, ean):
         try:
             args = parser.parse_args()
+            args['type'] = int(args['type'])
         except Exception:
-            return abort(400, message="Invalid arguments")
-
-        if args['type'] is None or len(args['type']) == 0:
             return abort(400, message="Invalid arguments")
 
         if args['name'] is None or len(args['name']) == 0:
@@ -44,11 +42,11 @@ class Product(Resource):
 
         with db:
             with db.cursor() as cursor:
-                cursor.execute("SELECT name FROM product_types WHERE name=%s", [args['type']])
+                cursor.execute("SELECT id FROM product_types WHERE id=%s", [args['type']])
                 if cursor.fetchone() is None:
                     abort(400, message="Invalid arguments, product type does not exist.")
 
-                cursor.execute("SELECT name, type FROM products WHERE ean=%s", (ean,))
+                cursor.execute("SELECT name, type FROM products WHERE ean=%s", [ean,])
                 if cursor.fetchone() is None:
                     self.add_product(ean, args['name'], args['type'])
                     return None, 201
@@ -80,7 +78,8 @@ class ProductData:
             return {
                 "ean": gtin,
                 "name": product['records'][0]['fields']['gtin_nm'],
-                "type": None
+                "type": 1 # Is always undefined
+                # TODO: Add Product Type recognition from recipe API
             }
         else:
             return None
@@ -90,8 +89,8 @@ class ProductTypes(Resource):
     def get(self):
         with db:
             with db.cursor() as cursor:
-                cursor.execute("SELECT name FROM product_types")
+                cursor.execute("SELECT id, name, image FROM product_types")
                 result = []
                 for row in cursor.fetchall():
-                    result.append(row[0])
+                    result.append({'id': row[0], 'name': row[1], 'image': row[2]})
                 return result

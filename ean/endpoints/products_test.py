@@ -25,7 +25,7 @@ class ProductTest(FoodshipTest):
 
         rv = self.app.put("/v1/product/321", data=dict(
             name="TestCase Product",
-            type=product_types[0]
+            type=product_types[0]['id']
         ))
 
         if exist_rq.status_code == 404:
