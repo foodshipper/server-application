@@ -1,3 +1,4 @@
+from ean.cron.send_notifications import send_invitations
 from ean.cron.create_groups import create_groups
 import logging
 
@@ -6,3 +7,4 @@ if __name__ == '__main__':
 
     logging.info("Run Cronjob")
     create_groups()
+    send_invitations()

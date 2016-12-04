@@ -18,6 +18,7 @@ def check_cronjob():
         # Create CRON cmd
         cmd = "cd " + os.getcwd() + " && "  # To have log files in the same place
         cmd += "PYTHONPATH='" + os.getcwd() + "' " # To find module
+        cmd += "FIREBASE_KEY='" + os.environ.get("FIREBASE_KEY") + "' "
         cmd += "DB_HOST='" + os.environ.get("DB_HOST", "localhost") + "' "
         cmd += "DB_USER='" + os.environ.get("DB_USER", "foodship") + "' "
         cmd += "DB_PASS='" + os.environ.get("DB_PASS", "") + "' "
