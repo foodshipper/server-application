@@ -6,6 +6,7 @@ from ean.endpoints.home_location import HomeLocation
 from ean.endpoints.products import Product, ProductTypes
 from ean.endpoints.user_name import UserName
 from ean.endpoints.version import APIInfo
+from ean.endpoints.user_firebase_token import UserFirebaseToken
 
 api = Api()
 
@@ -16,4 +17,5 @@ api.add_resource(APIInfo, '/status')
 api.add_resource(FridgeOverview, '/v1/items')
 api.add_resource(FridgeItem, '/v1/items/<string:ean>')
 api.add_resource(HomeLocation, '/v1/user/home-location')
+api.add_resource(UserFirebaseToken, '/v1/user/firebase-token')
 api.add_resource(UserName, '/v1/user/name')

@@ -74,4 +74,8 @@ Creates or updates the user name
 ## GET /user/name
 Gets the name of the user
 
+## PUT /user/firebase-token
+_firebase_token_: [Firebase Token](https://firebase.google.com/docs/reference/admin/java/reference/com/google/firebase/auth/FirebaseToken)
+
+Creates or updates the users firebase token for notification
 

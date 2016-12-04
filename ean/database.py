@@ -10,9 +10,14 @@ db = psycopg2.connect(host=os.environ.get("DB_HOST"), user=os.environ.get("DB_US
 
 def db_upgrade(installed_version):
     logging.debug("Database Upgrade from " + str(installed_version))
-    if installed_version != 1:
+    if installed_version < 1:
         create_tables()
         return 1
+    elif installed_version < 2:
+        with db:
+            with db.cursor() as cursor:
+                cursor.execute("ALTER TABLE users ADD COLUMN firebase_token VARCHAR(255)")
+                return 2
 
     return installed_version
 
@@ -57,6 +62,7 @@ def create_tables():
                 "CREATE TABLE IF NOT EXISTS users "
                 "(id SERIAL PRIMARY KEY,"
                 " token VARCHAR(64),"
+                " firebase_token VARCHAR(255), "
                 " longitude DOUBLE PRECISION,"
                 " latitude DOUBLE PRECISION,"
                 " geom GEOGRAPHY (POINT,4326),"
