@@ -13,7 +13,7 @@ def db_upgrade(installed_version):
     if installed_version < 1:
         create_tables()
         return 1
-    elif installed_version < 2:
+    elif installed_version == 1:
         with db:
             with db.cursor() as cursor:
                 cursor.execute("ALTER TABLE users ADD COLUMN firebase_token VARCHAR(255)")

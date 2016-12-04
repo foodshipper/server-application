@@ -93,3 +93,4 @@ ENV/
 
 # Generated files
 .db_version
+.idea/
