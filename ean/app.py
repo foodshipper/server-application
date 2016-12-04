@@ -3,27 +3,28 @@ from crontab import CronTab
 import sys, os
 from ean.api import api
 from ean.database import check_db
-
+import logging
 
 def check_cronjob():
-    print("Checking for Cronjob")
+    logging.debug("Checking for Cronjob")
     try:
         my_cron = CronTab(user=True)
         cmd = sys.executable + " " + os.getcwd() + "/cron/cron.py"
         if my_cron.find_command(cmd) is not None:
-            print("Cronjob does already exist")
+            logging.info("Cronjob does already exist")
             return True
 
         job = my_cron.new(cmd, 'Foodship API Worker')
         job.minute.every(15)
         my_cron.write()
-        print("Wrote Crontab")
+        logging.info("Wrote Crontab")
     except FileNotFoundError:
-        print("Could not create Crontab Entry: File not found", file=sys.stderr)
+        logging.warning("Could not create Crontab Entry: File not found")
 
 
 def create_app():
-    print("Creating App")
+    logging.basicConfig(filename='foodship.log', level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
+    logging.debug("Creating App")
     app = Flask(__name__)
     app.config['ERROR_404_HELP'] = False
     api.init_app(app)

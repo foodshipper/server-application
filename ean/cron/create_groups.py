@@ -29,7 +29,6 @@ def create_groups():
                         [current_middleman])
 
                     if cursor.rowcount > 0:
-                        print("Jump")
                         jump = True
                     else:
                         cursor.execute("INSERT INTO groups (day) VALUES (CURRENT_DATE) RETURNING id")

@@ -1,7 +1,7 @@
 import os
 
 import psycopg2
-import os.path
+import os.path, logging
 
 db = psycopg2.connect(host=os.environ.get("DB_HOST"), user=os.environ.get("DB_USER"),
                       password=os.environ.get("DB_PASS"),
@@ -9,7 +9,7 @@ db = psycopg2.connect(host=os.environ.get("DB_HOST"), user=os.environ.get("DB_US
 
 
 def db_upgrade(installed_version):
-    print("Database Upgrade from " + str(installed_version))
+    logging.debug("Database Upgrade from " + str(installed_version))
     if installed_version != 1:
         create_tables()
         return 1
@@ -27,7 +27,7 @@ def check_db():
                 with open(db_version_file, "r") as f:
                     if f.readable():
                         installed_version = f.readlines()[0]
-                        print("Installed DB Version: " + installed_version)
+                        logging.info("Installed DB Version: " + installed_version)
 
             with open(db_version_file, "w") as f:
                 f.write(str(db_upgrade(int(installed_version))))
@@ -36,7 +36,7 @@ def check_db():
 def create_tables():
     with db:
         with db.cursor() as cursor:
-            print("Creating Database Tables")
+            logging.info("Creating Database Tables")
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS product_types "
                 "(name VARCHAR(30) PRIMARY KEY )")
