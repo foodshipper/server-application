@@ -6,6 +6,7 @@ from ean.database import create_tables
 
 
 def check_cronjob():
+    print("Checking for Cronjob")
     try:
         my_cron = CronTab(user=True)
         cmd = sys.executable + " " + os.getcwd() + "/cron/cron.py"
@@ -21,6 +22,7 @@ def check_cronjob():
 
 
 def create_app():
+    print("Creating App")
     app = Flask(__name__)
     app.config['ERROR_404_HELP'] = False
     api.init_app(app)
