@@ -176,7 +176,7 @@ def install_testdata():
     with db:
         with db.cursor() as cursor:
             if int(os.environ.get("PRODUCTIVE", 1)) != 0:
-                raise Exception("Teardown called on productive Server")
+                raise Exception("Testdata install called on productive Server")
 
             if os.path.isfile("sampledata/test_data.sql"):
                 with open("sampledata/test_data.sql", "r") as f:
