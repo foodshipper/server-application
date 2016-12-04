@@ -1,3 +1,6 @@
+import os
+
+import requests
 from flask_restful import Resource, reqparse, abort
 from werkzeug.exceptions import BadRequest
 
@@ -58,10 +61,41 @@ class Group(Resource):
                 if user_id is None:
                     return abort(403, message="Token is not allowed to view this group")
 
-                cursor.execute("SELECT id FROM groups_rel WHERE user_id=%s AND groups_rel.group_id=%s", [user_id, group_id])
+                cursor.execute("SELECT id FROM groups_rel WHERE user_id=%s AND groups_rel.group_id=%s",
+                               [user_id, group_id])
                 rel = cursor.fetchone()
                 if rel is None:
                     return abort(404, message="Group not found")
 
                 cursor.execute("UPDATE groups_rel SET accepted=%s WHERE id=%s", [args['accepted'], rel[0]])
                 return 200
+
+
+class Recipes:
+    headers = {"X-Mashape-Key": os.environ.get("MASHAPE_KEY")}
+
+    def suggest_recipes(self, products, number=5):
+        req = requests.get(
+            'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients'
+            '?fillIngredients=false'
+            '&ingredients={}'
+            '&limitLicense=false'
+            '&number={}'
+            '&ranking=1'.format(number, products),
+            headers=self.headers)
+        if req.status_code == requests.codes.ok:
+            recipes = req.json()
+            print(recipes)
+
+    def get_recipe_detail(self, recipe_id):
+        req = requests.get(
+            'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/{}/information'
+            '?includeNutrition=false'.format(recipe_id),
+            headers=self.headers)
+        if req.status_code == requests.codes.ok:
+            recipe = req.json()
+            print(recipe)
+
+
+if __name__ == '__main__':
+    Recipes().get_recipe_detail(528333)
