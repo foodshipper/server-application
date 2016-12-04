@@ -2,8 +2,9 @@
 Server written in Python for the Foodship Android App
 
 # API Documentation
-[Read More](ean/endpoints/Endpoints.md)
+[API Endpoints](ean/endpoints/Endpoints.md)
 
+[Data Notifications](ean/cron/Notifications.md)
 # Installation
 * You need an installed PostgreSQL Database and a Webserver like nginx or apache.
 ```bash
