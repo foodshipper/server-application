@@ -7,7 +7,7 @@ from flask import Flask
 
 from ean.api import api
 from ean.database import check_db
-
+import os
 
 def check_cronjob():
     logging.debug("Checking for Cronjob")
@@ -15,7 +15,8 @@ def check_cronjob():
     try:
         my_cron = CronTab(user=True)
 
-        cmd = "DB_HOST='" + os.environ.get("DB_HOST", "localhost") + "' "
+        cmd = "cd " + os.getcwd() + " && "
+        cmd += "DB_HOST='" + os.environ.get("DB_HOST", "localhost") + "' "
         cmd += "DB_USER='" + os.environ.get("DB_USER", "foodship") + "' "
         cmd += "DB_PASS='" + os.environ.get("DB_PASS", "") + "' "
         cmd += "DB_NAME='" + os.environ.get("DB_NAME", "foodship") + "' "
