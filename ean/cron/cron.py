@@ -1,4 +1,4 @@
-from cron.create_groups import create_groups
+from ean.cron.create_groups import create_groups
 
 
 if __name__ == '__main__':

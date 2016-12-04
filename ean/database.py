@@ -1,15 +1,42 @@
 import os
 
 import psycopg2
+import os.path
 
 db = psycopg2.connect(host=os.environ.get("DB_HOST"), user=os.environ.get("DB_USER"),
                       password=os.environ.get("DB_PASS"),
                       database=os.environ.get("DB_NAME"))
 
 
+def db_upgrade(installed_version):
+    print("Database Upgrade from " + str(installed_version))
+    if installed_version != 1:
+        create_tables()
+        return 1
+
+    return installed_version
+
+
+def check_db():
+    with db:
+        with db.cursor() as cursor:
+            # Check for current DB Version
+            installed_version = 0
+            db_version_file = "db_version"
+            if os.path.isfile(db_version_file) :
+                with open(db_version_file, "r") as f:
+                    if f.readable():
+                        installed_version = f.readlines()[0]
+                        print("Installed DB Version: " + installed_version)
+
+            with open(db_version_file, "w") as f:
+                f.write(str(db_upgrade(int(installed_version))))
+
+
 def create_tables():
     with db:
         with db.cursor() as cursor:
+            print("Creating Database Tables")
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS product_types "
                 "(name VARCHAR(30) PRIMARY KEY )")
@@ -25,7 +52,7 @@ def create_tables():
                 "CREATE TABLE IF NOT EXISTS products "
                 "(ean VARCHAR(13) PRIMARY KEY, name VARCHAR(100), type VARCHAR(30) REFERENCES product_types(name))")
 
-            #User Table
+            # User Table
             cursor.execute(
                 "CREATE TABLE IF NOT EXISTS users "
                 "(id SERIAL PRIMARY KEY,"
@@ -42,7 +69,7 @@ def create_tables():
                 "   RETURN NEW;"
                 " END;"
                 "$set_user_geom$ LANGUAGE plpgsql;")
-            cursor.execute("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal AND tgrelid = 'users'::regclass")
+            cursor.execute("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal AND tgrelid = 'users'::REGCLASS")
             trigger = cursor.fetchone()
             if trigger is None or trigger[0] != "user_geom":
                 cursor.execute(
@@ -54,18 +81,18 @@ def create_tables():
                 "CREATE TABLE IF NOT EXISTS fridge_items "
                 "(id SERIAL PRIMARY KEY, ean VARCHAR(13) REFERENCES products(ean), user_id SERIAL REFERENCES users(id))")
 
-            #Group Table
+            # Group Table
             cursor.execute(
-                           "CREATE TABLE IF NOT EXISTS groups "
-                           "(id SERIAL PRIMARY KEY,"
-                           " day DATE)")
+                "CREATE TABLE IF NOT EXISTS groups "
+                "(id SERIAL PRIMARY KEY,"
+                " day DATE)")
             cursor.execute(
-                           "CREATE TABLE IF NOT EXISTS groups_rel "
-                           "(id SERIAL PRIMARY KEY,"
-                           "user_id SERIAL REFERENCES users(id),"
-                           "group_id SERIAL REFERENCES groups(id),"
-                           "invited BOOL DEFAULT FALSE,"
-                           "accepted BOOL DEFAULT FALSE)")
+                "CREATE TABLE IF NOT EXISTS groups_rel "
+                "(id SERIAL PRIMARY KEY,"
+                "user_id SERIAL REFERENCES users(id),"
+                "group_id SERIAL REFERENCES groups(id),"
+                "invited BOOL DEFAULT FALSE,"
+                "accepted BOOL DEFAULT FALSE)")
 
             cursor.execute(
                 "CREATE OR REPLACE FUNCTION unique_group_member()"
@@ -77,7 +104,7 @@ def create_tables():
                 "   RETURN NEW;"
                 " END;"
                 " $unique_group_member$ LANGUAGE plpgsql;")
-            cursor.execute("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal AND tgrelid = 'groups_rel'::regclass")
+            cursor.execute("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal AND tgrelid = 'groups_rel'::REGCLASS")
             trigger = cursor.fetchone()
             if trigger is None or trigger[0] != "groups_rel_unique":
                 cursor.execute(

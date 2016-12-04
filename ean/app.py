@@ -2,7 +2,7 @@ from flask import Flask
 from crontab import CronTab
 import sys, os
 from ean.api import api
-from ean.database import create_tables
+from ean.database import check_db
 
 
 def check_cronjob():
@@ -11,6 +11,7 @@ def check_cronjob():
         my_cron = CronTab(user=True)
         cmd = sys.executable + " " + os.getcwd() + "/cron/cron.py"
         if my_cron.find_command(cmd) is not None:
+            print("Cronjob does already exist")
             return True
 
         job = my_cron.new(cmd, 'Foodship API Worker')
@@ -26,7 +27,7 @@ def create_app():
     app = Flask(__name__)
     app.config['ERROR_404_HELP'] = False
     api.init_app(app)
-    create_tables()
+    check_db()
     check_cronjob()
 
     return app

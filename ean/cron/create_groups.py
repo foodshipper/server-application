@@ -1,4 +1,4 @@
-from database import db
+from ean.database import db
 
 
 def create_groups():
