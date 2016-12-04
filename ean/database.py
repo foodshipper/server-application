@@ -12,7 +12,7 @@ def db_upgrade(installed_version):
     logging.debug("Database Upgrade from " + str(installed_version))
     if installed_version < 1:
         create_tables()
-        return 1
+        return 2
     elif installed_version == 1:
         with db:
             with db.cursor() as cursor:
@@ -31,8 +31,10 @@ def check_db():
             if os.path.isfile(db_version_file) :
                 with open(db_version_file, "r") as f:
                     if f.readable():
-                        installed_version = f.readlines()[0]
-                        logging.info("Installed DB Version: " + installed_version)
+                        content = f.readlines()
+                        if len(content) > 0:
+                            installed_version = content[0]
+                        logging.info("Installed DB Version: " + str(installed_version))
 
             with open(db_version_file, "w") as f:
                 f.write(str(db_upgrade(int(installed_version))))
