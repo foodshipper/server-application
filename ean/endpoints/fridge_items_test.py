@@ -3,7 +3,7 @@ from flask import json
 from ean.FoodshipTest import FoodshipTest
 
 
-class ProductTest(FoodshipTest):
+class FridgeItemsTest(FoodshipTest):
     token = "TEST_TEST_TEST"
 
     def testGetItems(self):

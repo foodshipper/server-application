@@ -19,7 +19,7 @@ class TestUserName(FoodshipTest):
             name=self.name
         ))
 
-        self.assertEqual(rv.status_code, 200, "PUT with valid ID and name should return HTTP 200")
+        self.assertEqual(rv.status_code, 201, "PUT with valid ID and name should return HTTP 201: Created")
 
     def test_get(self):
         rv = self.app.put("/v1/user/name", data=dict(
@@ -27,7 +27,7 @@ class TestUserName(FoodshipTest):
             name=self.name
         ))
 
-        self.assertEqual(rv.status_code, 200, "PUT with valid ID and name should return HTTP 200")
+        self.assertEqual(rv.status_code, 201, "PUT with valid ID and name should return HTTP 201: Created")
 
         rv = self.app.get("/v1/user/name", data=dict(
             token=self.token

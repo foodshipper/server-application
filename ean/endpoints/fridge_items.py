@@ -23,7 +23,7 @@ class FridgeOverview(Resource):
                     "SELECT fridge_items.ean, products.name, products.type FROM fridge_items"
                     " JOIN products ON products.ean=fridge_items.ean"
                     " WHERE fridge_items.user_id=%s",
-                    [user_id])
+                    [user_id[0]])
                 response = []
                 for item in cursor.fetchall():
                     response.append({'ean': item[0],
@@ -47,11 +47,11 @@ class FridgeItem(Resource):
                     "SELECT products.name, products.type FROM fridge_items"
                     " JOIN products ON products.ean=fridge_items.ean"
                     " WHERE fridge_items.user_id=%s AND fridge_items.ean=%s",
-                    [user_id, ean])
+                    [user_id[0], ean])
                 query = cursor.fetchone()
                 if query is None:
                     p = Product.get(ean)  # Produces 404 if not exists
-                    cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, user_id])
+                    cursor.execute("INSERT INTO fridge_items (ean, user_id) VALUES (%s, %s)", [ean, user_id[0]])
                     return p, 201
                 else:
                     return {

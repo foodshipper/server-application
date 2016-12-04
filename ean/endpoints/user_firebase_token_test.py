@@ -19,4 +19,4 @@ class TestUserFirebaseToken(FoodshipTest):
             firebase_token=self.firebase_token
         ))
 
-        self.assertEqual(rv.status_code, 200, "PUT with valid ID and Firebase token should return HTTP 200")
+        self.assertEqual(rv.status_code, 201, "PUT with valid ID and Firebase token should return HTTP 201: Created")

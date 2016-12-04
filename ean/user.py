@@ -28,7 +28,9 @@ def token_exists(token):
 
 
 def get_or_create_id(token):
+    created = False
     user_id = id_from_token(token)
     if user_id is None:
         user_id = register_user(token)
-    return user_id
+        created = True
+    return user_id, created

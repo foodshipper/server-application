@@ -7,6 +7,8 @@ db = psycopg2.connect(host=os.environ.get("DB_HOST"), user=os.environ.get("DB_US
                       password=os.environ.get("DB_PASS"),
                       database=os.environ.get("DB_NAME"))
 
+db_version_file = ".db_version"
+
 
 def db_upgrade(installed_version):
     logging.debug("Database Upgrade from " + str(installed_version))
@@ -46,8 +48,7 @@ def check_db():
         with db.cursor() as cursor:
             # Check for current DB Version
             installed_version = 0
-            db_version_file = ".db_version"
-            if os.path.isfile(db_version_file) :
+            if os.path.isfile(db_version_file):
                 with open(db_version_file, "r") as f:
                     if f.readable():
                         content = f.readlines()
@@ -149,3 +150,37 @@ def create_tables():
                 "success BOOL DEFAULT FALSE,"
                 "msg TEXT)"
             )
+
+
+# NEVER (!) call this on a productive server
+def teardown():
+    with db:
+        with db.cursor() as cursor:
+            if int(os.environ.get("PRODUCTIVE", 1)) != 0:
+                raise Exception("Teardown called on productive Server")
+            cursor.execute("DROP TABLE fridge_items")
+            cursor.execute("DROP TABLE products")
+            cursor.execute("DROP TABLE product_types")
+
+            cursor.execute("DROP TABLE groups_rel")
+            cursor.execute("DROP TABLE groups")
+            cursor.execute("DROP TABLE notification_log")
+            cursor.execute("DROP TABLE users")
+
+            if os.path.isfile(db_version_file):
+                os.remove(db_version_file)
+
+
+# NEVER (!) call this on a productive server
+def install_testdata():
+    with db:
+        with db.cursor() as cursor:
+            if int(os.environ.get("PRODUCTIVE", 1)) != 0:
+                raise Exception("Teardown called on productive Server")
+
+            if os.path.isfile("sampledata/test_data.sql"):
+                with open("sampledata/test_data.sql", "r") as f:
+                    if f.readable():
+                        for stmt in f.readlines():
+                            if len(stmt) > 10:
+                                cursor.execute(stmt)
