@@ -7,7 +7,7 @@ INSERT INTO public.users (id, token, longitude, latitude) VALUES (4, 'albertplat
 INSERT INTO public.users (id, token, longitude, latitude) VALUES (5, 'rosis', 13.747716, 51.070161);
 INSERT INTO public.users (id, token, longitude, latitude) VALUES (6, 'bischofsplatz', 13.750688, 51.071368);
 INSERT INTO public.users (id, token, longitude, latitude) VALUES (7, 'alaunpark', 13.760054, 51.070256);
-
+ALTER SEQUENCE users_id_seq RESTART WITH 8;
 INSERT INTO public.groups (id, day) VALUES (3, '2016-12-04');
 INSERT INTO public.groups (id, day) VALUES (4, '2016-12-04');
 
