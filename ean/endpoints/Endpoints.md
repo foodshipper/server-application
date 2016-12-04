@@ -6,7 +6,7 @@ Returns JSON-Object with ean, name and type
 Returns 404 if product is not found
 
 #### Example: GET /product/4000406071242
-```javascript
+```json
 {
     "type": "flour",
     "ean": "4000406071242",
@@ -25,7 +25,7 @@ Creates or updates (override) product information
 ## GET /types
 Returns a JSON-Array with valid product types
 #### Example: GET /types
-```javascript
+```json
 ["milk", "water", "tomato", "flour", "pork", "chicken", "beef", "undefined"]
 ```
 
@@ -38,7 +38,7 @@ Every request expects a valid token!
 Returns a JSON Array with Products that are saved for the current user
 
 #### Example: GET /items?token=5
-```javascript
+```json
 [{
     "type": "flour",
     "ean": "4000406071242",
@@ -77,5 +77,30 @@ Gets the name of the user
 ## PUT /user/firebase-token
 _firebase_token_: [Firebase Token](https://firebase.google.com/docs/reference/admin/java/reference/com/google/firebase/auth/FirebaseToken)
 
-Creates or updates the users firebase token for notification
+Creates or updates the users Firebase token for notification
 
+# Dinner Groups
+_token_: Unique Identification of current user
+
+## GET /dinner/<<int:group_id>>
+Gets Group Information
+```json
+{
+    "invited": 4,
+    "accepted": 2,
+    "day": "2016-12-04"
+}
+```
+
+## PUT /dinner/<<int:group_id>>
+_accept_: Boolean, whether user accepts invitation or not
+
+## GET /dinner/<<int:group_id>>/recipes
+Gets possible recipes
+```json
+[
+{"id": 321, "title": "Chicken Curry", "desc": "Tasty chicken curry", "upvotes": 2, "veto": false}, 
+{"id": 324, "title": "Pizza Funghi", "desc": "Tasty Pizza", "upvotes": 3, "veto": false},
+{"id": 325, "title": "Spaghetti Carbonara", "desc": "Tasty chicken curry", "upvotes": 2, "veto": false}     
+]
+```
