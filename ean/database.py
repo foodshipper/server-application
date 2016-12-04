@@ -22,7 +22,7 @@ def check_db():
         with db.cursor() as cursor:
             # Check for current DB Version
             installed_version = 0
-            db_version_file = "db_version"
+            db_version_file = ".db_version"
             if os.path.isfile(db_version_file) :
                 with open(db_version_file, "r") as f:
                     if f.readable():
