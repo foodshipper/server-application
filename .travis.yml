@@ -11,6 +11,7 @@ after_success:
 - git checkout -b deploy
 - git add .
 - git -c user.name='travis' -c user.email='travis' commit -m "Deploy"
+- git pull
 - git push https://$GITHUB_TOKEN@github.com/foodshipper/server-application.git
 script: python -m unittest discover -s . -p '*_test.py'
 env:
