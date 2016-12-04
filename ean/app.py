@@ -9,7 +9,7 @@ def check_cronjob():
     logging.debug("Checking for Cronjob")
     try:
         my_cron = CronTab(user=True)
-        cmd = sys.executable + " " + os.getcwd() + "/cron/cron.py"
+        cmd = sys.executable + " " + os.getcwd() + "/ean/cron/cron.py"
         i = 0
         for job in my_cron.find_command(cmd):
             i += 1
