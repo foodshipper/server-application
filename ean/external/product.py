@@ -9,6 +9,7 @@ outpan_key = os.environ.get("OUTPAN_KEY")
 
 
 def request_product(gtin):
+    type_id = 1  # Undefined Category
     product_name = request_product_opendatasoft(gtin)
     if product_name is None:
         product_name = request_product_outpan(gtin)
@@ -16,7 +17,6 @@ def request_product(gtin):
     if product_name is None:
         return None
 
-    type_id = 1  # Undefined Category
     classified = classify_product(product_name)
 
     if classified is not None:

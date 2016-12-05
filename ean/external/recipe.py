@@ -85,7 +85,7 @@ def classify_product(name):
         data=json.dumps({"title": name}))
     if req.status_code != requests.codes.ok:
         print("Error getting Product Type")
-        return None, None
+        return None, name
 
     product = req.json()
 

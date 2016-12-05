@@ -15,6 +15,8 @@ class ProductTest(FoodshipTest):
         self.assertEqual(rv.status_code, 200, "Product with EAN 4000406071242 should be found")
         answer = json.loads(rv.data.decode("utf-8"))
 
+        self.assertTrue("name" in answer, "Name should be in Product Response")
+        print(answer)
         self.assertIn("Mehl", answer["name"], "Product Response should return the correct name")
 
     def testPutProduct(self):
