@@ -1,11 +1,12 @@
-import requests
 from flask_restful import Resource, abort, reqparse
 
 from ean.database import db
+from ean.external.product import request_product
 
 parser = reqparse.RequestParser()
 parser.add_argument('name')
 parser.add_argument('type', required=True)
+
 
 
 class Product(Resource):
@@ -23,7 +24,7 @@ class Product(Resource):
                         "type": product[1]
                     }
                 else:
-                    result = ProductData.request_product(ean)
+                    result = request_product(ean)
                     if result is not None:
                         Product.add_product(result['ean'], result['name'], result['type'])
                         return result
@@ -46,7 +47,7 @@ class Product(Resource):
                 if cursor.fetchone() is None:
                     abort(400, message="Invalid arguments, product type does not exist.")
 
-                cursor.execute("SELECT name, type FROM products WHERE ean=%s", [ean,])
+                cursor.execute("SELECT name, type FROM products WHERE ean=%s", [ean, ])
                 if cursor.fetchone() is None:
                     self.add_product(ean, args['name'], args['type'])
                     return None, 201
@@ -61,28 +62,6 @@ class Product(Resource):
         with db:
             with db.cursor() as cursor:
                 cursor.execute("INSERT INTO products (ean, name, type) VALUES (%s, %s, %s)", (ean, name, product_type))
-
-
-class ProductData:
-    @staticmethod
-    def request_product(gtin):
-        req = requests.get(
-            'http://pod.opendatasoft.com/api/records/1.0/search/?dataset=pod_gtin&rows=1&refine.gtin_cd={}'.format(
-                gtin))
-        if req.status_code == requests.codes.ok:
-            product = req.json()
-            if product['nhits'] == 0:
-                return None
-            if 'gtin_nm' not in product['records'][0]['fields']:
-                return None
-            return {
-                "ean": gtin,
-                "name": product['records'][0]['fields']['gtin_nm'],
-                "type": 1 # Is always undefined
-                # TODO: Add Product Type recognition from recipe API
-            }
-        else:
-            return None
 
 
 class ProductTypes(Resource):

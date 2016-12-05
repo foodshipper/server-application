@@ -1,6 +1,6 @@
 import logging
 
-from ean.cron.recipe import RecipeAPI
+from external.recipe import suggest_recipes
 from ean.database import db
 
 
@@ -61,7 +61,7 @@ def suggest_group_recipe(group_id):
         with db.cursor() as cursor:
             logging.debug("Searching for recipes for Group #" + str(group_id))
             cursor.execute("SELECT DISTINCT product_types.name FROM groups_rel "
-                           "JOIN fridge_items ON fridge_items.user_id = groups_rel.id "
+                           "JOIN fridge_items ON fridge_items.user_id = groups_rel.user_id "
                            "LEFT JOIN products ON fridge_items.ean = products.ean "
                            "LEFT JOIN product_types ON products.type = product_types.id "
                            "WHERE groups_rel.group_id=%s", [group_id])
@@ -69,6 +69,6 @@ def suggest_group_recipe(group_id):
             for row in cursor.fetchall():
                 ingredients += row[0] + ","
             ingredients.strip(",")
-            print("Ingredients:" + ingredients)
-            for recipe in RecipeAPI().suggest_recipes(ingredients, 5):
-                cursor.execute("INSERT INTO group_recipes (group_id, recipe_id) VALUES (%s, %s)", [group_id, recipe])
+            if ingredients != "":
+                for recipe in suggest_recipes(ingredients, 20):
+                    cursor.execute("INSERT INTO group_recipes (group_id, recipe_id) VALUES (%s, %s)", [group_id, recipe])

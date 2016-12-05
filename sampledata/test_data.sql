@@ -10,6 +10,7 @@ INSERT INTO public.users (id, token, longitude, latitude) VALUES (7, 'alaunpark'
 ALTER SEQUENCE users_id_seq RESTART WITH 8;
 INSERT INTO public.groups (id, day) VALUES (3, '2016-12-04');
 INSERT INTO public.groups (id, day) VALUES (4, '2016-12-04');
+ALTER SEQUENCE groups_id_seq RESTART WITH 5;
 
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (8, 4, 3, true, true);
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (9, 5, 3, true, true);
@@ -18,6 +19,7 @@ INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES 
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (12, 1, 4, true, false);
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (13, 2, 4, true, true);
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (14, 3, 4, true, false);
+ALTER SEQUENCE groups_rel_id_seq RESTART WITH 15;
 
 INSERT INTO products (ean, name, type) VALUES (123, 'Butter', 4);
 INSERT INTO products (ean, name, type) VALUES (321, 'Eggs', 5);
