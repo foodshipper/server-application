@@ -2,6 +2,9 @@ import os
 
 import requests
 
+from ean.database import db
+from ean.external.recipe import classify_product
+
 outpan_key = os.environ.get("OUTPAN_KEY")
 
 
@@ -13,11 +16,33 @@ def request_product(gtin):
     if product_name is None:
         return None
 
+    type_id = 1  # Undefined Category
+    classified = classify_product(product_name)
+
+    if classified is None:
+        return None
+    product_type, product_name = classified
+
+    if product_type is not None and 'name' in product_type:
+        with db:
+            with db.cursor() as cursor:
+                print(product_type)
+                cursor.execute(
+                    "SELECT id FROM product_types WHERE name LIKE %s OR product_types.image=%s",
+                    ['%' + product_type['name'] + '%', product_type['image']])
+
+                product_type_db = cursor.fetchone()
+                if product_type_db is not None:
+                    type_id = product_type_db[0]
+                else:
+                    cursor.execute("INSERT INTO product_types (name, image) VALUES (%s, %s) RETURNING id",
+                                   [product_type['name'], product_type['image']])
+                    type_id = cursor.fetchone()[0]
+
     return {
         "ean": gtin,
         "name": product_name,
-        "type": 1  # Is always undefined
-        # TODO: Add Product Type recognition from recipe API
+        "type": type_id  # Is always undefined
     }
 
 
@@ -43,7 +68,6 @@ def request_product_outpan(gtin):
             gtin, outpan_key))
     if req.status_code == requests.codes.ok:
         product = req.json()
-        print(product['name'])
         if 'name' in product:
             return product['name']
     else:

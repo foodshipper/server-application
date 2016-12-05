@@ -1,11 +1,13 @@
+import json
 import logging
 import os
 
 import requests
 
-from database import db
+from ean.database import db
 
-headers = {"X-Mashape-Key": os.environ.get("MASHAPE_KEY")}
+headers = {"X-Mashape-Key": os.environ.get("MASHAPE_KEY"), "Content-type": "application/json",
+           "Accept": "application/json"}
 
 
 def suggest_recipes(products, number=20):
@@ -74,3 +76,29 @@ def get_recipe_detail(external_id):
                                "VALUES (%s, %s, %s, %s)",
                                [product_id, recipe_id, product['amount'], product['unit']])
             return recipe_id
+
+
+def classify_product(name):
+    req = requests.post(
+        'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/products/classify',
+        headers=headers,
+        data=json.dumps({"title": name}))
+    if req.status_code != requests.codes.ok:
+        print("Error getting Product Type")
+        return None, None
+
+    product = req.json()
+
+    if 'category' not in product or product['category'] is None:
+        return None
+
+    if 'image' not in product:
+        product['image'] = None
+
+    if 'cleanTitle' not in product:
+        product['cleanTitle'] = name
+
+    return {
+        'name': product['category'],
+        'image': product['image']
+    }, product['cleanTitle']
