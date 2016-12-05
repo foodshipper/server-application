@@ -19,25 +19,24 @@ def request_product(gtin):
     type_id = 1  # Undefined Category
     classified = classify_product(product_name)
 
-    if classified is None:
-        return None
-    product_type, product_name = classified
+    if classified is not None:
+        product_type, product_name = classified
 
-    if product_type is not None and 'name' in product_type:
-        with db:
-            with db.cursor() as cursor:
-                print(product_type)
-                cursor.execute(
-                    "SELECT id FROM product_types WHERE name LIKE %s OR product_types.image=%s",
-                    ['%' + product_type['name'] + '%', product_type['image']])
+        if product_type is not None and 'name' in product_type:
+            with db:
+                with db.cursor() as cursor:
+                    print(product_type)
+                    cursor.execute(
+                        "SELECT id FROM product_types WHERE name LIKE %s OR product_types.image=%s",
+                        ['%' + product_type['name'] + '%', product_type['image']])
 
-                product_type_db = cursor.fetchone()
-                if product_type_db is not None:
-                    type_id = product_type_db[0]
-                else:
-                    cursor.execute("INSERT INTO product_types (name, image) VALUES (%s, %s) RETURNING id",
-                                   [product_type['name'], product_type['image']])
-                    type_id = cursor.fetchone()[0]
+                    product_type_db = cursor.fetchone()
+                    if product_type_db is not None:
+                        type_id = product_type_db[0]
+                    else:
+                        cursor.execute("INSERT INTO product_types (name, image) VALUES (%s, %s) RETURNING id",
+                                       [product_type['name'], product_type['image']])
+                        type_id = cursor.fetchone()[0]
 
     return {
         "ean": gtin,

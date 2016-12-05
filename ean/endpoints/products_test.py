@@ -6,7 +6,7 @@ from ean.FoodshipTest import FoodshipTest
 class ProductTest(FoodshipTest):
     def testGetProduct(self):
         # Get unknown product
-        rv = self.app.get("/v1/product/9999")
+        rv = self.app.get("/v1/product/9299")
         self.assertEqual(rv.status_code, 404, "Product with EAN 9999 should not be found")
         self.assertGreater(len(rv.data), 10, "JSON encoded Error Message should be longer then 10 characters")
 
@@ -15,7 +15,7 @@ class ProductTest(FoodshipTest):
         self.assertEqual(rv.status_code, 200, "Product with EAN 4000406071242 should be found")
         answer = json.loads(rv.data.decode("utf-8"))
 
-        self.assertIn("Mehl", answer['name'], "Product Response should return the correct name")
+        self.assertIn("Mehl", answer["name"], "Product Response should return the correct name")
 
     def testPutProduct(self):
         exist_rq = self.app.get("/v1/product/321")
