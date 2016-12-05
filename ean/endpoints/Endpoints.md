@@ -99,8 +99,10 @@ _accept_: Boolean, whether user accepts invitation or not
 Gets possible recipes
 ```json
 [
-{"id": 321, "title": "Chicken Curry", "desc": "Tasty chicken curry", "upvotes": 2, "veto": false}, 
-{"id": 324, "title": "Pizza Funghi", "desc": "Tasty Pizza", "upvotes": 3, "veto": false},
-{"id": 325, "title": "Spaghetti Carbonara", "desc": "Tasty chicken curry", "upvotes": 2, "veto": false}     
+ {"image": "https://spoonacular.com/recipeImages/black-pepper-crepes-with-goat-cheese-and-tomatoes-2-79315.jpg", "desc": null, "title": "Black Pepper Crepes With Goat Cheese And Tomatoes", "upvotes": 0, "veto": false, "id": 25},
+ {"image": "https://spoonacular.com/recipeImages/Fried-Green-Tomatoes-408340.jpg", "desc": null, "title": "Fried Green Tomatoes", "upvotes": 0, "veto": false, "id": 26},
+ {"image": "https://spoonacular.com/recipeImages/cherry_tomato_and_basil_clafoutis-47077.jpg", "desc": null, "title": "Cherry Tomato And Basil Clafoutis", "upvotes": 0, "veto": false, "id": 27},
+ {"image": "https://spoonacular.com/recipeImages/Savory-Tomato-Scones-201022.jpg", "desc": null, "title": "Savory Tomato Scones", "upvotes": 0, "veto": false, "id": 28},
+ {"image": "https://spoonacular.com/recipeImages/toad-in-the-hole-828894.jpg", "desc": null, "title": "Toad In The Hole", "upvotes": 0, "veto": false, "id": 29}
 ]
 ```

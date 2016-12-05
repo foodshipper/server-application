@@ -1,5 +1,5 @@
 from ean.cron.send_notifications import send_invitations
-from ean.cron.create_groups import create_groups
+from ean.cron.create_groups import create_groups, suggest_all_recipes
 import logging
 
 if __name__ == '__main__':
@@ -7,4 +7,5 @@ if __name__ == '__main__':
 
     logging.info("Run Cronjob")
     create_groups()
+    suggest_all_recipes()
     send_invitations()

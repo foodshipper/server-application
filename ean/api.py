@@ -8,6 +8,7 @@ from ean.endpoints.user_name import UserName
 from ean.endpoints.version import APIInfo
 from ean.endpoints.user_firebase_token import UserFirebaseToken
 from ean.endpoints.group import Group
+from ean.endpoints.group_recipes import GroupRecipes
 
 api = Api()
 
@@ -21,3 +22,4 @@ api.add_resource(HomeLocation, '/v1/user/home-location')
 api.add_resource(UserFirebaseToken, '/v1/user/firebase-token')
 api.add_resource(UserName, '/v1/user/name')
 api.add_resource(Group, '/v1/dinner/<int:group_id>')
+api.add_resource(GroupRecipes, '/v1/dinner/<int:group_id>/recipes')

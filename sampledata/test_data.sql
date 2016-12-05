@@ -19,4 +19,18 @@ INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES 
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (13, 2, 4, true, true);
 INSERT INTO public.groups_rel (id, user_id, group_id, invited, accepted) VALUES (14, 3, 4, true, false);
 
+INSERT INTO products (ean, name, type) VALUES (123, 'Butter', 4);
+INSERT INTO products (ean, name, type) VALUES (321, 'Eggs', 5);
+INSERT INTO products (ean, name, type) VALUES (231, 'Milk', 8);
+INSERT INTO products (ean, name, type) VALUES (121, 'Flour',6);
+INSERT INTO products (ean, name, type) VALUES (222, 'Tomato', 12);
+
+INSERT INTO fridge_items (ean, user_id) VALUES
+  (123, 1), (231, 1), (222, 1),
+  (321, 2), (121, 2),
+  (222, 3), (123, 3),
+  (123, 4), (321, 4), (231, 4),
+  (121, 5), (231, 5), (321, 5),
+  (123, 6), (321, 6), (231, 6), (121, 6),
+  (222, 7);
 COMMIT;

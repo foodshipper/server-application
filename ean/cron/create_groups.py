@@ -1,3 +1,6 @@
+import logging
+
+from ean.cron.recipe import RecipeAPI
 from ean.database import db
 
 
@@ -10,12 +13,12 @@ def create_groups():
                            "    MAX(st_distance(a.geom, b.geom)) AS max_distance,"
                            "    a.geom"
                            "  FROM users AS a"
-                           "  JOIN users AS b ON st_distance(a.geom, b.geom) < 1500 AND a.token != b.token"
+                           "  JOIN users AS b ON st_distance(a.geom, b.geom) < 15000 AND a.token != b.token"
                            "  GROUP BY a.id, a.geom"
                            "  HAVING COUNT(b.token) > 1"
                            "    ORDER BY COUNT(b.id) DESC) AS middleman"
                            " LEFT JOIN users"
-                           " ON st_distance(middleman.geom, users.geom) < 1500")
+                           " ON st_distance(middleman.geom, users.geom) < 15000")
 
             current_middleman = None
             current_group = None
@@ -40,3 +43,32 @@ def create_groups():
 
                 cursor.execute("INSERT INTO groups_rel (user_id, group_id) VALUES (%s, %s)", [item[1], current_group])
                 group_members.append(item[1])
+
+
+def suggest_all_recipes():
+    with db:
+        with db.cursor() as cursor:
+            cursor.execute('SELECT groups.id FROM groups '
+                           'LEFT JOIN group_recipes ON groups.id = group_recipes.group_id '
+                           'WHERE group_recipes.group_id IS NULL AND groups.day = CURRENT_DATE')
+
+            for row in cursor.fetchall():
+                suggest_group_recipe(row[0])
+
+
+def suggest_group_recipe(group_id):
+    with db:
+        with db.cursor() as cursor:
+            logging.debug("Searching for recipes for Group #" + str(group_id))
+            cursor.execute("SELECT DISTINCT product_types.name FROM groups_rel "
+                           "JOIN fridge_items ON fridge_items.user_id = groups_rel.id "
+                           "LEFT JOIN products ON fridge_items.ean = products.ean "
+                           "LEFT JOIN product_types ON products.type = product_types.id "
+                           "WHERE groups_rel.group_id=%s", [group_id])
+            ingredients = ""
+            for row in cursor.fetchall():
+                ingredients += row[0] + ","
+            ingredients.strip(",")
+            print("Ingredients:" + ingredients)
+            for recipe in RecipeAPI().suggest_recipes(ingredients, 5):
+                cursor.execute("INSERT INTO group_recipes (group_id, recipe_id) VALUES (%s, %s)", [group_id, recipe])

@@ -14,7 +14,13 @@ def db_upgrade(installed_version):
     logging.debug("Database Upgrade from " + str(installed_version))
     if installed_version < 5:
         create_tables()
-        return 5
+        installed_version = 5
+    if installed_version == 5:
+        with db:
+            with db.cursor() as cursor:
+                cursor.execute("ALTER TABLE group_recipes ADD COLUMN upvotes SMALLINT DEFAULT 0;")
+                cursor.execute("ALTER TABLE group_recipes ADD COLUMN veto BOOLEAN DEFAULT FALSE;")
+                installed_version = 6
 
     return installed_version
 
@@ -32,8 +38,10 @@ def check_db():
                             installed_version = content[0]
                         logging.info("Installed DB Version: " + str(installed_version))
 
+            upgraded_version = str(db_upgrade(int(installed_version)))
+
             with open(db_version_file, "w") as f:
-                f.write(str(db_upgrade(int(installed_version))))
+                f.write(upgraded_version)
 
 
 def create_tables():

@@ -1,14 +1,15 @@
 import os
 
+import logging
 import requests
-
-from database import db
+from ean.database import db
 
 
 class RecipeAPI:
     headers = {"X-Mashape-Key": os.environ.get("MASHAPE_KEY")}
 
     def suggest_recipes(self, products, number=5):
+        recipe_ids = []
         req = requests.get(
             'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients'
             '?fillIngredients=false'
@@ -19,11 +20,12 @@ class RecipeAPI:
             headers=self.headers)
         if req.status_code == requests.codes.ok:
             recipes = req.json()
-            recipe_ids = []
             for recipe in recipes:
                 recipe_ids.append(self.get_recipe_detail(recipe['id']))
-
-            return recipe_ids
+        else:
+            logging.error("Request failed!")
+            logging.error(req.request)
+        return recipe_ids
 
     def get_recipe_detail(self, external_id):
         with db:
@@ -61,7 +63,7 @@ class RecipeAPI:
 
                         cursor.execute("INSERT INTO product_types (external_id, category, name, image) VALUES "
                                        "(%s, %s, %s, %s) RETURNING id",
-                                        [product['id'], product['aisle'], product['name'], product['image']])
+                                       [product['id'], product['aisle'], product['name'], product['image']])
                         product_id = cursor.fetchone()[0]
                     else:
                         product_id = query[0]
