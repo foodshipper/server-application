@@ -1,5 +1,5 @@
 from ean.database import db
-from external.firebase_service import push_service
+from ean.external.firebase_service import push_service
 
 
 def send_invitations():
