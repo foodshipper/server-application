@@ -79,6 +79,9 @@ _firebase_token_: [Firebase Token](https://firebase.google.com/docs/reference/ad
 
 Creates or updates the users Firebase token for notification
 
+## PUT /user/invitations
+_resend_all_: True, if invitations should be resend
+
 # Dinner Groups
 _token_: Unique Identification of current user
 
