@@ -1,6 +1,6 @@
 import logging
 
-from external.recipe import suggest_recipes
+from ean.external.recipe import suggest_recipes
 from ean.database import db
 
 
