@@ -1,8 +1,9 @@
 from flask_restful import Resource, abort, reqparse
 from werkzeug.exceptions import BadRequest
 
+from ean.cron.send_notifications import send_invitations
 from ean.database import db
-from ean.user import id_from_token, get_or_create_id
+from ean.user import id_from_token
 
 parser = reqparse.RequestParser()
 parser.add_argument('token', required=True)
@@ -29,4 +30,5 @@ class UserGroups(Resource):
                                    "JOIN groups ON groups_rel.group_id = groups.id "
                                    "WHERE groups_rel.user_id=%s AND groups.day = CURRENT_DATE)",
                                    [user_id])
+                    send_invitations()
                     return 200
