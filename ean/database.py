@@ -77,6 +77,8 @@ def teardown():
             cursor.execute("DROP TABLE products")
             cursor.execute("DROP TABLE product_types")
 
+            cursor.execute("DROP TABLE group_recipe_vote_log")
+            cursor.execute("DROP TABLE group_recipes")
             cursor.execute("DROP TABLE groups_rel")
             cursor.execute("DROP TABLE groups")
             cursor.execute("DROP TABLE notification_log")
