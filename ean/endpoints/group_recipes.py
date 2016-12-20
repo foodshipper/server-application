@@ -11,9 +11,9 @@ parser = reqparse.RequestParser()
 parser.add_argument('token', required=True)
 
 put_parser = reqparse.RequestParser()
-parser.add_argument('token', required=True)
-parser.add_argument('action', required=True)
-parser.add_argument('recipe_id', required=True)
+put_parser.add_argument('token', required=True)
+put_parser.add_argument('action', required=True)
+put_parser.add_argument('recipe_id', required=True)
 
 
 class GroupRecipes(Resource):
