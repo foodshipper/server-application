@@ -1,4 +1,4 @@
-TRUNCATE TABLE public.fridge_items, public.products, public.groups_rel, public.groups, public.notification_log, public.users, public.group_recipes;
+TRUNCATE TABLE public.fridge_items, public.products, public.groups_rel, public.groups, public.notification_log, public.users, public.group_recipes, public.group_recipe_vote_log;
 
 INSERT INTO public.users (id, token, longitude, latitude) VALUES (1, 'zellescherweg', 13.750865, 51.028659);
 INSERT INTO public.users (id, token, longitude, latitude) VALUES (2, 'wasaplatz', 13.759448, 51.027947);
