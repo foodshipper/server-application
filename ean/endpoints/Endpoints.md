@@ -98,7 +98,7 @@ Gets Group Information
 ## PUT /dinner/<<int:group_id>>
 _accept_: Boolean, whether user accepts invitation or not
 
-## GET /dinner/<<int:group_id>>/recipe
+## GET /dinner/<<int:group_id>>/recipes
 Gets possible recipes
 ```json
 [
@@ -110,7 +110,7 @@ Gets possible recipes
 ]
 ```
 
-## PUT /dinner/<<int:group_id>>/recipe
+## PUT /dinner/<<int:group_id>>/recipes
 _recipe_id_: Id of the recipe
 _action_: Possible: ```upvote``` or ```action```
 
