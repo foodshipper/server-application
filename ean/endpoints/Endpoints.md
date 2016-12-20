@@ -98,7 +98,7 @@ Gets Group Information
 ## PUT /dinner/<<int:group_id>>
 _accept_: Boolean, whether user accepts invitation or not
 
-## GET /dinner/<<int:group_id>>/recipes
+## GET /dinner/<<int:group_id>>/recipe
 Gets possible recipes
 ```json
 [
@@ -109,3 +109,9 @@ Gets possible recipes
  {"image": "https://spoonacular.com/recipeImages/toad-in-the-hole-828894.jpg", "desc": null, "title": "Toad In The Hole", "upvotes": 0, "veto": false, "id": 29}
 ]
 ```
+
+## PUT /dinner/<<int:group_id>>/recipe
+_recipe_id_: Id of the recipe
+_action_: Possible: ```upvote``` or ```action```
+
+Sets the response to a single recipe of a user

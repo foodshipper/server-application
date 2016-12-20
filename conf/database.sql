@@ -82,6 +82,30 @@ CREATE TABLE IF NOT EXISTS group_recipes (
   recipe_id SERIAL REFERENCES rec_recipes (id)
 );
 
+CREATE TABLE IF NOT EXISTS group_recipe_vote_log (
+  id        SERIAL PRIMARY KEY ,
+  grecipe_id SERIAL REFERENCES group_recipes(id),
+  user_id   SERIAL REFERENCES users(id),
+  action    VARCHAR(10),
+  time      TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION unique_recipe_vote()
+  RETURNS TRIGGER AS $unique_recipe_vote$ BEGIN
+  WITH votes AS
+    (SELECT SUM((action='upvote')::INT) as upvotes, SUM((action='veto')::INT) > 0 as veto FROM
+      (SELECT DISTINCT ON (user_id) action FROM group_recipe_vote_log WHERE grecipe_id = NEW.grecipe_id ORDER BY user_id, time DESC) as vote_log)
+  UPDATE group_recipes SET
+    upvotes=(SELECT upvotes FROM votes),
+    veto=(SELECT veto FROM votes)
+    WHERE group_recipes.id = NEW.grecipe_id;
+  RETURN NEW;
+END; $unique_recipe_vote$ LANGUAGE plpgsql;
+
+CREATE TRIGGER group_recipe_votes
+AFTER INSERT OR UPDATE ON group_recipe_vote_log
+FOR EACH ROW EXECUTE PROCEDURE unique_recipe_vote();
+
 CREATE OR REPLACE FUNCTION unique_group_member()
   RETURNS TRIGGER AS $unique_group_member$ BEGIN IF EXISTS(SELECT TRUE
                                                            FROM groups_rel

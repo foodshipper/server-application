@@ -21,6 +21,16 @@ def db_upgrade(installed_version):
                 cursor.execute("ALTER TABLE group_recipes ADD COLUMN upvotes SMALLINT DEFAULT 0;")
                 cursor.execute("ALTER TABLE group_recipes ADD COLUMN veto BOOLEAN DEFAULT FALSE;")
                 installed_version = 6
+    if installed_version == 6:
+        with db:
+            with db.cursor() as cursor:
+                cursor.execute("CREATE TABLE IF NOT EXISTS group_recipe_vote_log "
+                               "(id SERIAL PRIMARY KEY,"
+                               "grecipe_id SERIAL REFERENCES group_recipes(id),"
+                               "user_id SERIAL REFERENCES users(id),"
+                               "action VARCHAR(10),"
+                               "time TIMESTAMP)")
+                installed_version = 7
 
     return installed_version
 
