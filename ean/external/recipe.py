@@ -10,7 +10,7 @@ headers = {"X-Mashape-Key": os.environ.get("MASHAPE_KEY"), "Content-type": "appl
            "Accept": "application/json"}
 
 
-def suggest_recipes(products, number=20):
+def suggest_recipes(products, number=50):
     recipe_ids = []
     req = requests.get(
         'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients'

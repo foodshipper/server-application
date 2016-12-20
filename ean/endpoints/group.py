@@ -67,5 +67,5 @@ class Group(Resource):
                 if rel is None:
                     return abort(404, message="Group not found")
 
-                cursor.execute("UPDATE groups_rel SET accepted=%s WHERE id=%s", [args['accepted'], rel[0]])
+                cursor.execute("UPDATE groups_rel SET accepted=%s WHERE id=%s", [args['accept'], rel[0]])
                 return 200

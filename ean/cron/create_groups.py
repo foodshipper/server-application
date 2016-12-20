@@ -7,13 +7,13 @@ from ean.database import db
 def create_groups():
     with db:
         with db.cursor() as cursor:
-            cursor.execute(" SELECT middleman.id, users.id, middleman.member"
-                           " FROM (SELECT a.id,"
-                           "    COUNT(b.id) AS member,"
+            cursor.execute(" SELECT middleman.id as user_1_id, users.id as user_2_id, middleman.member"
+                           " FROM (SELECT a.id as user_id,"
+                           "    COUNT(b.id) AS group_member,"
                            "    MAX(st_distance(a.geom, b.geom)) AS max_distance,"
                            "    a.geom"
                            "  FROM users AS a"
-                           "  JOIN users AS b ON st_distance(a.geom, b.geom) < 15000 AND a.token != b.token"
+                           "  JOIN users AS b ON st_distance(a.geom, b.geom) < 1500 AND a.token != b.token"
                            "  GROUP BY a.id, a.geom"
                            "  HAVING COUNT(b.token) > 1"
                            "    ORDER BY COUNT(b.id) DESC) AS middleman"
