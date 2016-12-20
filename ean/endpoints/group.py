@@ -29,7 +29,7 @@ class Group(Resource):
                 if user_id is None:
                     return abort(403, message="Token is not allowed to view this group")
 
-                cursor.execute("SELECT day, COUNT(user_id) AS invited, "
+                cursor.execute("SELECT day, COUNT(CASE WHEN invited THEN 1 END) AS invited, "
                                "COUNT(CASE WHEN accepted THEN 1 END) AS accepted, "
                                # Only if user is Group Member this will be 1
                                "COUNT(CASE WHEN user_id=%s THEN 1 END) = 1 AS allowed "
