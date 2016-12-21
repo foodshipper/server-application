@@ -72,7 +72,9 @@ class GroupRecipes(Resource):
                 if group is None:
                     return abort(403, message="Token is not allowed to view this group")
 
-                cursor.execute("INSERT INTO group_recipe_vote_log (grecipe_id, user_id, action) VALUES (%s, %s, %s)",
-                               [args['recipe_id'], user_id, args['action']])
+                cursor.execute("INSERT INTO group_recipe_vote_log (grecipe_id, user_id, action) VALUES "
+                               "((SELECT id FROM group_recipes WHERE group_id=%s AND group_recipes.recipe_id=%s),"
+                               " %s, %s)",
+                               [group_id, args['recipe_id'], user_id, args['action']])
 
                 return None, 200
