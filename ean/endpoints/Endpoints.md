@@ -101,12 +101,50 @@ _accept_: Boolean, whether user accepts invitation or not
 ## GET /dinner/<<int:group_id>>/recipes
 Gets possible recipes
 ```json
-[
- {"image": "https://spoonacular.com/recipeImages/black-pepper-crepes-with-goat-cheese-and-tomatoes-2-79315.jpg", "desc": null, "title": "Black Pepper Crepes With Goat Cheese And Tomatoes", "upvotes": 0, "veto": false, "id": 25},
- {"image": "https://spoonacular.com/recipeImages/Fried-Green-Tomatoes-408340.jpg", "desc": null, "title": "Fried Green Tomatoes", "upvotes": 0, "veto": false, "id": 26},
- {"image": "https://spoonacular.com/recipeImages/cherry_tomato_and_basil_clafoutis-47077.jpg", "desc": null, "title": "Cherry Tomato And Basil Clafoutis", "upvotes": 0, "veto": false, "id": 27},
- {"image": "https://spoonacular.com/recipeImages/Savory-Tomato-Scones-201022.jpg", "desc": null, "title": "Savory Tomato Scones", "upvotes": 0, "veto": false, "id": 28},
- {"image": "https://spoonacular.com/recipeImages/toad-in-the-hole-828894.jpg", "desc": null, "title": "Toad In The Hole", "upvotes": 0, "veto": false, "id": 29}
+[ { "cheap" : false,
+    "desc" : null,
+    "duration" : 45,
+    "id" : 11,
+    "image" : "https://spoonacular.com/recipeImages/Cornbread-Pudding-673749.jpg",
+    "title" : "Cornbread Pudding",
+    "upvotes" : 0,
+    "vegan" : false,
+    "vegetarian" : false,
+    "veto" : false
+  },
+  { "cheap" : false,
+    "desc" : null,
+    "duration" : 140,
+    "id" : 68,
+    "image" : "https://spoonacular.com/recipeImages/Winter-Squash-Bread-and-Butter-Pudding-622998.jpg",
+    "title" : "Winter Squash Bread and Butter Pudding",
+    "upvotes" : 0,
+    "vegan" : false,
+    "vegetarian" : false,
+    "veto" : false
+  },
+  { "cheap" : false,
+    "desc" : null,
+    "duration" : 100,
+    "id" : 69,
+    "image" : "https://spoonacular.com/recipeImages/Blueberry-White-Chocolate-Bread-Pudding-with-Amaretto-Cream-Sauce-518935.jpg",
+    "title" : "Blueberry White Chocolate Bread Pudding with Amaretto Cream Sauce",
+    "upvotes" : 0,
+    "vegan" : false,
+    "vegetarian" : false,
+    "veto" : false
+  },
+  { "cheap" : false,
+    "desc" : null,
+    "duration" : 240,
+    "id" : 70,
+    "image" : "https://spoonacular.com/recipeImages/nutella-sticky-buns-693249.jpg",
+    "title" : "Nutella Sticky Buns",
+    "upvotes" : 0,
+    "vegan" : false,
+    "vegetarian" : true,
+    "veto" : false
+  }
 ]
 ```
 
