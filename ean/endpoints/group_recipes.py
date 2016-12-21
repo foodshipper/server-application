@@ -36,7 +36,7 @@ class GroupRecipes(Resource):
                 if group is None:
                     return abort(403, message="Token is not allowed to view this group")
 
-                cursor.execute("SELECT recipe_id, title, upvotes, veto, image FROM group_recipes "
+                cursor.execute("SELECT recipe_id, title, upvotes, veto, image, cheap, vegan, vegetarian, duration FROM group_recipes "
                                "LEFT JOIN rec_recipes ON group_recipes.recipe_id = rec_recipes.id "
                                "WHERE group_id=%s", [group_id])
 
@@ -49,7 +49,11 @@ class GroupRecipes(Resource):
                         'desc': None,
                         'upvotes': recipe[2],
                         'veto': recipe[3],
-                        'image': recipe[4]
+                        'image': recipe[4],
+                        'cheap': recipe[5],
+                        'vegan': recipe[6],
+                        'vegetarian': recipe[7],
+                        'duration': recipe[8]
                     })
                 return recipes
 
