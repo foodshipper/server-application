@@ -62,6 +62,9 @@ def request_product_opendatasoft(gtin):
 
 
 def request_product_outpan(gtin):
+    #Outpan does classify EAN-8 Codes wron
+    if len(str(gtin)) == 8:
+        return None
     req = requests.get(
         'https://api.outpan.com/v2/products/{}?apikey={}'.format(
             gtin, outpan_key))
