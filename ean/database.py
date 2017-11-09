@@ -95,8 +95,8 @@ def install_testdata():
             if int(os.environ.get("PRODUCTIVE", 1)) != 0:
                 raise Exception("Testdata install called on productive Server")
 
-            if os.path.isfile("sampledata/test_data.sql"):
-                with open("sampledata/test_data.sql", "r") as f:
+            if os.path.isfile("conf/test_data.sql"):
+                with open("conf/test_data.sql", "r") as f:
                     if f.readable():
                         for stmt in f.readlines():
                             if len(stmt) > 10:

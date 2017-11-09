@@ -1,0 +1,39 @@
+version: '3'
+services:
+  db:
+    container_name: foodship-db
+    image: mdillon/postgis:9.5-alpine
+    volumes:
+      - "db-data:/var/lib/postgresql/data" 
+    environment:
+      POSTGRES_USER: foodship
+      POSTGRES_PASSWORD: secretfood
+    networks:
+      - foodship-net
+
+  web:
+    image: jwilder/nginx-proxy:alpine
+    container_name: foodship-web
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - foodship-net
+
+  app:
+    build: .
+    image: foodship-app:v1
+    container_name: foodship-app   
+    depends_on:
+      - db
+    environment:
+      VIRTUAL_HOST: foodship.hsht.de
+    networks:
+      - foodship-net
+
+volumes:
+  db-data:
+
+networks:
+  foodship-net:
